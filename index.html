@@ -76,10 +76,17 @@ img{display:block;max-width:100%}
    NAVIGATION
    =================================================================== */
 .brand{
-  position:fixed;top:clamp(1rem,3vw,2rem);left:var(--pad);z-index:7000;
-  mix-blend-mode:multiply;
+  position:fixed;top:clamp(.8rem,2.6vw,1.6rem);left:var(--pad);z-index:7000;
+  padding:.5rem .85rem;border-radius:12px;background:transparent;
+  box-shadow:0 8px 30px rgba(14,14,102,0);
+  transition:background .4s var(--ease),box-shadow .4s var(--ease),backdrop-filter .4s var(--ease);
 }
-.brand img{height:clamp(34px,4.5vw,46px);width:auto}
+.brand.scrolled{
+  background:rgba(245,247,252,.94);
+  box-shadow:0 8px 30px rgba(14,14,102,.12);
+  -webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);
+}
+.brand img{height:clamp(34px,4.5vw,46px);width:auto;display:block}
 
 .menu-toggle{
   position:fixed;top:clamp(1rem,3vw,2rem);right:var(--pad);z-index:7500;
@@ -313,14 +320,14 @@ footer{background:var(--ink);color:var(--paper);padding:clamp(4rem,9vw,7rem) var
 
 <!-- ============ PRELOADER ============ -->
 <div id="preloader">
-  <img src="https://ksx.hjg.temporary.site/website_d2c01be2/wp-content/uploads/2025/10/Sign-2.gif" alt="Gulf Paper Industries" />
+  <img src="images/sign.gif" alt="Gulf Paper Industries" />
   <div class="pl-bar"><span id="plFill"></span></div>
   <div class="pl-count"><b id="plNum">0</b>%</div>
 </div>
 
 <!-- ============ NAV ============ -->
 <a class="brand" href="#top" aria-label="Gulf Paper Industries home">
-  <img src="https://ksx.hjg.temporary.site/website_d2c01be2/wp-content/uploads/2025/06/cropped-logo-1-1.png" alt="Gulf Paper Industries" />
+  <img src="images/logo.png" alt="Gulf Paper Industries" />
 </a>
 
 <button class="menu-toggle" id="menuToggle"><span class="dot"></span><span id="menuLabel">Menu</span></button>
@@ -375,7 +382,7 @@ footer{background:var(--ink);color:var(--paper);padding:clamp(4rem,9vw,7rem) var
   <div class="about-grid">
     <figure class="about-fig" data-fig>
       <div class="mask" data-mask></div>
-      <img src="https://ksx.hjg.temporary.site/website_d2c01be2/wp-content/uploads/2026/02/784-x-1344.jpg" alt="Gulf Paper Industries" loading="lazy" />
+      <img src="images/about.jpg" alt="Gulf Paper Industries" loading="lazy" />
     </figure>
     <div class="about-copy">
       <span class="eyebrow" data-fade>About us</span>
@@ -517,7 +524,7 @@ footer{background:var(--ink);color:var(--paper);padding:clamp(4rem,9vw,7rem) var
 <footer>
   <div class="foot-big" data-lines>Everyday, <em>elevated.</em></div>
   <div class="foot-row">
-    <img src="https://ksx.hjg.temporary.site/website_d2c01be2/wp-content/uploads/2025/06/logo-1-300x50.png" alt="Gulf Paper Industries" />
+    <img src="images/logo-footer.png" alt="Gulf Paper Industries" />
     <div class="foot-links">
       <a href="#about">About</a>
       <a href="#products">Products</a>
@@ -541,15 +548,15 @@ footer{background:var(--ink);color:var(--paper);padding:clamp(4rem,9vw,7rem) var
   if (hasGSAP && typeof ScrollTrigger !== 'undefined') gsap.registerPlugin(ScrollTrigger);
 
   /* ---------- INDUSTRIES data ---------- */
-  const BASE='https://ksx.hjg.temporary.site/website_d2c01be2/wp-content/uploads/2025/11/';
+  const BASE='images/';
   const inds=[
-    ['Airports','Gemini_Generated_Image_var085var085var0-min.png'],
-    ['Catering Companies','Gemini_Generated_Image_u5sby6u5sby6u5sb-min.png'],
-    ['Hospitals','Gemini_Generated_Image_qxeoczqxeoczqxeo-min.png'],
-    ['Cleaning Companies','Gemini_Generated_Image_j8i88nj8i88nj8i8-min.png'],
-    ['Facility Management','Gemini_Generated_Image_fl8vc9fl8vc9fl8v-min.png'],
-    ['Restaurants','Gemini_Generated_Image_d7trn4d7trn4d7tr-min.png'],
-    ['Hotels','Gemini_Generated_Image_3i1zpy3i1zpy3i1z-min.png']
+    ['Airports','airports.png'],
+    ['Catering Companies','catering.png'],
+    ['Hospitals','hospitals.png'],
+    ['Cleaning Companies','cleaning.png'],
+    ['Facility Management','facility.png'],
+    ['Restaurants','restaurants.png'],
+    ['Hotels','hotels.png']
   ];
   function card(name,file,i){
     return `<div class="ind-card"><div class="ph"><img src="${BASE+file}" alt="${name}" loading="lazy"></div>
@@ -655,7 +662,13 @@ footer{background:var(--ink);color:var(--paper);padding:clamp(4rem,9vw,7rem) var
   function start(){
     initLenis();
     initMagnetic();
-    document.body.style.opacity=1;
+
+    /* logo banner: show light plate once scrolled (so blue logo stays visible on navy) */
+    const brandEl=document.querySelector('.brand');
+    const toggleBrand=y=>brandEl.classList.toggle('scrolled', y>60);
+    window.addEventListener('scroll',()=>toggleBrand(window.scrollY||window.pageYOffset),{passive:true});
+    if(lenis) lenis.on('scroll',({scroll})=>toggleBrand(scroll));
+    toggleBrand(window.scrollY||0);
 
     if(!hasGSAP){ // graceful no-JS-anim fallback: show everything
       document.querySelectorAll('.reveal-line>*,[data-fade],[data-fold],.mask').forEach(el=>{
@@ -812,8 +825,6 @@ footer{background:var(--ink);color:var(--paper);padding:clamp(4rem,9vw,7rem) var
     setTimeout(()=>ScrollTrigger.refresh(),400);
   });
 
-  document.body.style.opacity=0;
-  document.body.style.transition='opacity .6s ease';
 })();
 </script>
 </body>
