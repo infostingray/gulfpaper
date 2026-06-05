@@ -101,6 +101,7 @@
     menu.setAttribute('aria-hidden',!open);
     document.body.classList.toggle('lock',open);
     menuLabel.textContent=open?'Close':'Menu';
+    const tb=document.getElementById('topbar'); if(tb) tb.classList.toggle('menu-active',open);
     if(window.__updateLogo) window.__updateLogo();
     if(hasGSAP && !reduce){
       if(open) gsap.to(links,{y:0,duration:.8,stagger:.07,ease:'power4.out',delay:.15});
@@ -139,16 +140,17 @@
     initLenis();
     initMagnetic();
 
-    /* logo gets a subtle plate once scrolling (or when the menu is open) */
-    const brandEl=document.querySelector('.brand');
+    /* header banner: fill with blurred bar once scrolling (transparent while menu open) */
+    const topbar=document.getElementById('topbar');
     function updateLogo(){
+      if(!topbar) return;
       const y=window.scrollY||window.pageYOffset||0;
-      brandEl.classList.toggle('scrolled', y>60 || menu.classList.contains('open'));
+      topbar.classList.toggle('scrolled', y>40);
     }
     window.addEventListener('scroll',updateLogo,{passive:true});
     window.addEventListener('resize',updateLogo);
     if(lenis) lenis.on('scroll',updateLogo);
-    window.__updateLogo=updateLogo; // let menu toggle refresh it
+    window.__updateLogo=updateLogo;
     updateLogo();
 
     if(!hasGSAP){ // graceful no-JS-anim fallback: show everything
