@@ -139,13 +139,11 @@
     initLenis();
     initMagnetic();
 
-    /* logo flips to white whenever it sits over a dark section (no plate) */
+    /* logo gets a subtle plate once scrolling (or when the menu is open) */
     const brandEl=document.querySelector('.brand');
-    const darkSecs=()=>[...document.querySelectorAll('[data-dark]')];
     function updateLogo(){
-      const probe=44; // approx logo centre from top
-      const over=darkSecs().some(s=>{const r=s.getBoundingClientRect();return r.top<=probe && r.bottom>=probe;});
-      brandEl.classList.toggle('invert', over || menu.classList.contains('open'));
+      const y=window.scrollY||window.pageYOffset||0;
+      brandEl.classList.toggle('scrolled', y>60 || menu.classList.contains('open'));
     }
     window.addEventListener('scroll',updateLogo,{passive:true});
     window.addEventListener('resize',updateLogo);

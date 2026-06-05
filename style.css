@@ -70,12 +70,17 @@ img{display:block;max-width:100%}
    NAVIGATION
    =================================================================== */
 .brand{
-  position:fixed;top:clamp(.9rem,2.8vw,1.7rem);left:var(--pad);z-index:7000;
+  position:fixed;top:clamp(.7rem,2.4vw,1.4rem);left:var(--pad);z-index:7000;
+  padding:.45rem .7rem;border-radius:11px;background:transparent;border:1px solid transparent;
+  transition:background .45s var(--ease),border-color .45s var(--ease),box-shadow .45s var(--ease),backdrop-filter .45s var(--ease);
 }
-.brand img{height:clamp(34px,4.5vw,46px);width:auto;display:block;
-  transition:filter .45s var(--ease)}
-/* over dark sections the logo flips to white — no background plate */
-.brand.invert img{filter:brightness(0) invert(1)}
+/* subtle plate fades in once scrolling — keeps the logo legible over imagery & navy */
+.brand.scrolled{
+  background:rgba(245,247,252,.82);border-color:rgba(14,14,102,.07);
+  box-shadow:0 6px 22px rgba(14,14,102,.08);
+  -webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);
+}
+.brand img{height:clamp(32px,4.4vw,44px);width:auto;display:block}
 
 .menu-toggle{
   position:fixed;top:clamp(1rem,3vw,2rem);right:var(--pad);z-index:7500;
@@ -175,30 +180,30 @@ section{position:relative;padding:clamp(5rem,12vh,11rem) var(--pad)}
 @keyframes slide{0%{transform:translateX(-100%)}60%,100%{transform:translateX(100%)}}
 
 /* ===================================================================
-   ABOUT — statement + depth
+   ABOUT — image + text, side by side
    =================================================================== */
 #about{background:var(--paper);overflow:hidden}
-.about-head{max-width:1500px;margin:0 auto}
-.about-head h2{font-family:var(--f-display);font-weight:700;letter-spacing:-.03em;
-  font-size:clamp(2.3rem,7vw,6rem);line-height:.98;margin-top:1.2rem;max-width:16ch}
-.about-head h2 em{font-style:normal;color:var(--accent)}
-
-.about-body{display:grid;grid-template-columns:1fr;gap:clamp(2.5rem,6vw,5rem);align-items:start;margin-top:clamp(2.8rem,6vw,4.5rem);max-width:1500px}
-@media(min-width:920px){.about-body{grid-template-columns:.92fr 1.08fr}}
+.about-body{display:grid;grid-template-columns:1fr;gap:clamp(2rem,5vw,4.5rem);align-items:start;max-width:1500px}
+@media(min-width:860px){.about-body{grid-template-columns:.82fr 1.18fr}}
 
 .about-fig{position:relative;align-self:start}
-@media(min-width:920px){.about-fig{position:sticky;top:14vh}}
-.about-fig .deco{position:absolute;left:-16px;bottom:-16px;width:58%;height:62%;background:var(--ink);border-radius:6px;z-index:1}
+@media(min-width:860px){.about-fig{position:sticky;top:12vh}}
+.about-fig .deco{position:absolute;left:-14px;bottom:-14px;width:55%;height:58%;background:var(--ink);border-radius:6px;z-index:1}
 .about-fig .frame{position:relative;overflow:hidden;border-radius:6px;z-index:2}
-.about-fig .frame img{width:100%;height:auto;transform:scale(1.16);will-change:transform}
+.about-fig .frame img{width:100%;height:auto;display:block;transform:scale(1.16);will-change:transform}
 .about-fig .mask{position:absolute;inset:0;background:var(--accent);transform-origin:right;z-index:3}
 .about-fig .ftag{position:absolute;right:14px;bottom:14px;z-index:4;background:rgba(245,247,252,.92);
   -webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);padding:.5rem .85rem;border-radius:100px;
   font-family:var(--f-mono);font-size:.58rem;letter-spacing:.18em;text-transform:uppercase;color:var(--ink)}
+/* keep the portrait from dominating on phones */
+@media(max-width:860px){.about-fig .frame img{max-height:60vh;object-fit:cover;object-position:center}}
 
-.about-copy .lead{color:var(--ink);font-size:clamp(1.2rem,2vw,1.65rem);line-height:1.42;font-weight:400;
-  padding-left:1.4rem;border-left:2px solid var(--accent);margin-bottom:1.8rem}
-.about-copy p.body{max-width:58ch;color:var(--ink-2);font-size:clamp(1rem,1.3vw,1.12rem);margin-bottom:1.6rem}
+.about-copy h2{font-family:var(--f-display);font-weight:700;letter-spacing:-.03em;
+  font-size:clamp(2rem,4.6vw,4.2rem);line-height:1.02;margin:.9rem 0 1.5rem;max-width:15ch}
+.about-copy h2 em{font-style:normal;color:var(--accent)}
+.about-copy .lead{color:var(--ink);font-size:clamp(1.18rem,1.9vw,1.6rem);line-height:1.42;font-weight:400;
+  padding-left:1.4rem;border-left:2px solid var(--accent);margin-bottom:1.7rem}
+.about-copy p.body{max-width:60ch;color:var(--ink-2);font-size:clamp(1rem,1.3vw,1.12rem);margin-bottom:1.6rem}
 .about-copy .ig{display:inline-flex;align-items:center;gap:.6rem;font-family:var(--f-mono);font-size:.72rem;
   letter-spacing:.16em;text-transform:uppercase;color:var(--accent);border-bottom:1px solid var(--accent);
   padding-bottom:.35rem;transition:gap .35s var(--ease)}
@@ -314,6 +319,25 @@ footer{background:var(--ink);color:var(--paper);padding:clamp(4rem,9vw,7rem) var
   *{animation:none !important;transition:none !important}
   .reveal-line>*{transform:none !important}
   .fold-menu a{transform:none}
+}
+
+/* ===================================================================
+   MOBILE POLISH
+   =================================================================== */
+@media(max-width:720px){
+  :root{--pad:1.15rem}
+  .rail{display:none}                              /* chapter rail is desktop-only */
+  .hero-floats span{opacity:.28;font-size:46vw}    /* keep monogram from crowding hero text */
+  #hero{padding-top:7rem}
+  .menu-toggle{padding:.7rem 1.05rem;font-size:.64rem}
+  section{padding-top:clamp(3.5rem,9vh,5rem);padding-bottom:clamp(3.5rem,9vh,5rem)}
+  .about-fig .deco{left:-10px;bottom:-10px}
+  .ind-card{width:78vw}                             /* bigger industry cards on phones */
+  .foot-row{flex-direction:column;align-items:flex-start;gap:1.4rem}
+}
+@media(max-width:420px){
+  .hero-h{font-size:2.4rem}
+  .gallery{grid-template-columns:1fr 1fr;gap:.8rem}
 }
 
 /* ===================================================================
