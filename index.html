@@ -1,0 +1,820 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Gulf Paper Industries — Manufacturing The Future of Everyday use</title>
+<meta name="description" content="Gulf Paper Industries (GPI) — one of the region's leading manufacturers of high-quality paper, hygiene, plastic, food packaging and dispenser products. Doha, Qatar." />
+
+<!-- Brand fonts: Montserrat (display) + Lato (body) -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400;1,600;1,700&family=Lato:ital,wght@0,300;0,400;0,700;1,400&display=swap" rel="stylesheet">
+
+<style>
+/* =====================================================================
+   GULF PAPER INDUSTRIES — "FIBER: The Living Sheet"
+   ---------------------------------------------------------------------
+   Brand palette (edit in one place below):
+        --ink     #0E0E66  deep blue (primary)
+        --accent  #0D96CC  accent blue
+        --paper   #F5F7FC  clean background
+   Fonts: Montserrat (display) + Lato (body)
+   ===================================================================== */
+:root{
+  --paper:    #F5F7FC;   /* clean cool white   */
+  --paper-2:  #E9EEF8;   /* light blue tint    */
+  --paper-3:  #D7E0F0;   /* deeper blue tint   */
+  --ink:      #0E0E66;   /* GPI deep blue      */
+  --ink-2:    #474A77;   /* soft blue-grey text*/
+  --accent:   #0D96CC;   /* GPI accent blue    */
+  --accent-2: #2FB4ED;   /* luminous blue (on dark) */
+  --line:     rgba(14,14,102,.16);
+
+  --f-display:'Montserrat', system-ui, sans-serif;
+  --f-ui:'Lato', system-ui, sans-serif;
+  --f-mono:'Montserrat', system-ui, sans-serif;
+
+  --ease: cubic-bezier(.16,1,.3,1);
+  --pad: clamp(1.25rem, 5vw, 6rem);
+}
+
+*{margin:0;padding:0;box-sizing:border-box}
+html{ -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;}
+body{
+  font-family:var(--f-ui);
+  background:var(--paper);
+  color:var(--ink);
+  overflow-x:hidden;
+  line-height:1.5;
+}
+body.lock{overflow:hidden;height:100vh}
+a{color:inherit;text-decoration:none}
+img{display:block;max-width:100%}
+::selection{background:var(--accent);color:var(--paper)}
+
+/* ---------- paper grain overlay ---------- */
+.grain{
+  position:fixed;inset:0;z-index:9000;pointer-events:none;opacity:.05;
+  mix-blend-mode:multiply;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* ===================================================================
+   PRELOADER — the sheet
+   =================================================================== */
+#preloader{
+  position:fixed;inset:0;z-index:10000;background:var(--paper);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2rem;
+}
+#preloader img{width:clamp(120px,22vw,200px);height:auto;filter:contrast(1.05)}
+.pl-bar{width:min(60vw,340px);height:1px;background:var(--line);position:relative;overflow:hidden}
+.pl-bar span{position:absolute;inset:0;width:0;background:var(--ink)}
+.pl-count{font-family:var(--f-mono);font-size:.72rem;letter-spacing:.25em;color:var(--ink-2)}
+
+/* ===================================================================
+   NAVIGATION
+   =================================================================== */
+.brand{
+  position:fixed;top:clamp(1rem,3vw,2rem);left:var(--pad);z-index:7000;
+  mix-blend-mode:multiply;
+}
+.brand img{height:clamp(34px,4.5vw,46px);width:auto}
+
+.menu-toggle{
+  position:fixed;top:clamp(1rem,3vw,2rem);right:var(--pad);z-index:7500;
+  background:var(--ink);color:var(--paper);border:none;cursor:pointer;
+  font-family:var(--f-mono);font-size:.7rem;letter-spacing:.22em;text-transform:uppercase;
+  padding:.85rem 1.3rem;border-radius:100px;display:flex;align-items:center;gap:.6rem;
+  transition:background .4s var(--ease),color .4s var(--ease);
+}
+.menu-toggle .dot{width:6px;height:6px;border-radius:50%;background:var(--accent-2);transition:transform .4s var(--ease)}
+.menu-toggle:hover .dot{transform:scale(1.8)}
+
+/* full-screen fold menu */
+.fold-menu{
+  position:fixed;inset:0;z-index:7200;background:var(--ink);color:var(--paper);
+  display:flex;flex-direction:column;justify-content:center;padding:var(--pad);
+  clip-path:inset(0 0 100% 0);transition:clip-path .9s var(--ease);
+  pointer-events:none;
+}
+.fold-menu.open{clip-path:inset(0 0 0% 0);pointer-events:auto}
+.fold-menu ol{list-style:none}
+.fold-menu li{overflow:hidden}
+.fold-menu a{
+  display:inline-flex;align-items:baseline;gap:1.2rem;
+  font-family:var(--f-display);font-weight:600;
+  font-size:clamp(2.6rem,11vw,8.5rem);line-height:1.02;letter-spacing:-.02em;
+  padding:.4rem 0;transform:translateY(110%);transition:color .4s var(--ease);
+}
+.fold-menu a .num{font-family:var(--f-mono);font-size:.8rem;letter-spacing:.2em;opacity:.5;font-weight:400;align-self:flex-start;margin-top:.6rem}
+.fold-menu a:hover{color:var(--accent-2);font-style:italic}
+.fold-foot{display:flex;flex-wrap:wrap;gap:2rem;justify-content:space-between;margin-top:auto;padding-top:3rem;
+  font-family:var(--f-mono);font-size:.72rem;letter-spacing:.12em;color:rgba(243,239,230,.55);text-transform:uppercase}
+.fold-foot a:hover{color:var(--paper)}
+
+/* right chapter rail */
+.rail{
+  position:fixed;right:clamp(.8rem,2vw,1.6rem);top:50%;transform:translateY(-50%);
+  z-index:6000;display:flex;flex-direction:column;gap:.9rem;mix-blend-mode:difference;
+}
+.rail button{
+  background:none;border:none;cursor:pointer;display:flex;align-items:center;gap:.7rem;
+  font-family:var(--f-mono);font-size:.62rem;letter-spacing:.18em;color:#fff;
+  opacity:.4;transition:opacity .35s var(--ease);justify-content:flex-end;
+}
+.rail button .tick{width:18px;height:1px;background:#fff;transition:width .35s var(--ease)}
+.rail button .lbl{opacity:0;transform:translateX(6px);transition:.35s var(--ease)}
+.rail button:hover,.rail button.active{opacity:1}
+.rail button:hover .lbl,.rail button.active .lbl{opacity:1;transform:none}
+.rail button.active .tick{width:34px;background:var(--accent-2)}
+
+/* ===================================================================
+   GENERIC SECTION SCAFFOLD
+   =================================================================== */
+section{position:relative;padding:clamp(5rem,12vh,11rem) var(--pad)}
+.eyebrow{font-family:var(--f-mono);font-size:.7rem;letter-spacing:.28em;text-transform:uppercase;color:var(--accent);display:inline-flex;align-items:center;gap:.7rem}
+.eyebrow::before{content:"";width:26px;height:1px;background:var(--accent)}
+
+/* line-mask reveal helper */
+.reveal-line{display:block;overflow:hidden}
+.reveal-line > *{display:block;transform:translateY(115%)}
+
+/* ===================================================================
+   HERO
+   =================================================================== */
+#hero{min-height:100svh;display:flex;flex-direction:column;justify-content:center;padding-top:8rem;overflow:hidden}
+.hero-floats{position:absolute;inset:0;z-index:0;pointer-events:none}
+.hero-floats span{
+  position:absolute;font-family:var(--f-display);font-style:italic;color:var(--paper-3);
+  font-size:clamp(6rem,30vw,34rem);line-height:.8;font-weight:800;opacity:.55;user-select:none;
+}
+.hero-inner{position:relative;z-index:2;max-width:1500px}
+.hero-h{
+  font-family:var(--f-display);font-weight:700;letter-spacing:-.025em;
+  font-size:clamp(2.7rem,9.2vw,11rem);line-height:.97;margin:.4em 0 .9rem;
+}
+.hero-h em{font-style:italic;font-weight:700;color:var(--accent)}
+.hero-h .w{display:inline-block}
+.hero-ctas{display:flex;flex-wrap:wrap;gap:1rem;margin-top:2.4rem}
+
+.btn{
+  position:relative;display:inline-flex;align-items:center;gap:.7rem;cursor:pointer;
+  font-family:var(--f-mono);font-size:.74rem;letter-spacing:.16em;text-transform:uppercase;
+  padding:1.05rem 1.9rem;border-radius:100px;border:1px solid var(--ink);overflow:hidden;
+  background:transparent;color:var(--ink);will-change:transform;
+}
+.btn span{position:relative;z-index:2;transition:color .45s var(--ease)}
+.btn::after{content:"";position:absolute;inset:0;background:var(--ink);border-radius:100px;
+  transform:translateY(101%);transition:transform .5s var(--ease);z-index:1}
+.btn:hover::after{transform:translateY(0)}
+.btn:hover span{color:var(--paper)}
+.btn.solid{background:var(--accent);border-color:var(--accent);color:var(--paper)}
+.btn.solid::after{background:var(--ink)}
+.btn.solid:hover span{color:var(--paper)}
+
+.scroll-cue{margin-top:4rem;display:flex;align-items:center;gap:.8rem;font-family:var(--f-mono);font-size:.66rem;letter-spacing:.2em;text-transform:uppercase;color:var(--ink-2)}
+.scroll-cue .ln{width:42px;height:1px;background:var(--ink-2);position:relative;overflow:hidden}
+.scroll-cue .ln::after{content:"";position:absolute;inset:0;background:var(--accent);animation:slide 1.9s var(--ease) infinite}
+@keyframes slide{0%{transform:translateX(-100%)}60%,100%{transform:translateX(100%)}}
+
+/* ===================================================================
+   ABOUT
+   =================================================================== */
+#about{background:var(--paper)}
+.about-grid{display:grid;grid-template-columns:1fr;gap:clamp(2.5rem,6vw,5rem);align-items:start}
+@media(min-width:900px){.about-grid{grid-template-columns:.85fr 1.15fr}}
+.about-fig{position:relative;overflow:hidden;border-radius:4px}
+.about-fig img{width:100%;height:auto;transform:scale(1.18);will-change:transform}
+.about-fig .mask{position:absolute;inset:0;background:var(--paper);transform-origin:top;z-index:2}
+.about-copy h2{font-family:var(--f-display);font-weight:600;letter-spacing:-.02em;
+  font-size:clamp(2rem,5vw,3.9rem);line-height:1.02;margin:1.2rem 0 1.6rem}
+.about-copy h2 em{font-style:italic;color:var(--accent)}
+.about-copy p{max-width:60ch;color:var(--ink-2);font-size:clamp(1rem,1.3vw,1.18rem);margin-bottom:1.1rem}
+@media(min-width:900px){
+  .about-copy{padding-top:3rem}
+  .about-copy h2{margin-left:-2.5rem} /* editorial overlap */
+}
+
+/* ---------- three folds ---------- */
+.folds{display:grid;gap:1.4rem;margin-top:clamp(3rem,7vw,6rem)}
+@media(min-width:820px){.folds{grid-template-columns:repeat(3,1fr)}}
+.fold{
+  background:var(--paper-2);border:1px solid var(--line);border-radius:6px;
+  padding:clamp(1.8rem,3vw,2.6rem);transform-origin:top center;will-change:transform;
+}
+.fold:nth-child(2){margin-top:0}
+@media(min-width:820px){.fold:nth-child(2){margin-top:3rem}.fold:nth-child(3){margin-top:1.2rem}}
+.fold .n{font-family:var(--f-mono);font-size:.72rem;letter-spacing:.2em;color:var(--accent)}
+.fold h3{font-family:var(--f-display);font-weight:600;font-size:clamp(1.4rem,2.4vw,2rem);margin:1.6rem 0 .9rem;letter-spacing:-.01em}
+.fold p{color:var(--ink-2);font-size:.98rem}
+
+/* ===================================================================
+   PRODUCTS — pinned horizontal stack
+   =================================================================== */
+#products{padding:0;background:var(--ink);color:var(--paper)}
+.prod-track-wrap{height:100svh;overflow:hidden}
+.prod-track{display:flex;height:100%;will-change:transform}
+.prod-panel{flex:0 0 100vw;height:100%;display:flex;flex-direction:column;justify-content:center;padding:0 var(--pad);position:relative}
+.prod-intro .eyebrow{color:var(--accent-2)}
+.prod-intro .eyebrow::before{background:var(--accent-2)}
+.prod-intro h2{font-family:var(--f-display);font-weight:700;font-size:clamp(2.6rem,8vw,7rem);line-height:.98;letter-spacing:-.02em;margin:1.4rem 0}
+.prod-intro p{max-width:46ch;color:rgba(243,239,230,.62);font-size:clamp(1rem,1.4vw,1.2rem)}
+.prod-intro .hint{margin-top:2.5rem;font-family:var(--f-mono);font-size:.66rem;letter-spacing:.22em;text-transform:uppercase;color:rgba(243,239,230,.4);display:flex;align-items:center;gap:.8rem}
+.prod-intro .hint svg{width:46px}
+
+.cat{position:relative}
+.cat .idx{font-family:var(--f-mono);font-size:.8rem;letter-spacing:.2em;color:var(--accent-2)}
+.cat .big{font-family:var(--f-display);font-weight:700;font-size:clamp(3rem,12vw,11rem);line-height:.9;letter-spacing:-.03em;margin:.8rem 0;max-width:14ch}
+.cat .big em{font-style:italic;color:var(--accent-2)}
+.cat-more{display:inline-flex;align-items:center;gap:.7rem;margin-top:1rem;
+  font-family:var(--f-mono);font-size:.74rem;letter-spacing:.16em;text-transform:uppercase;
+  border-bottom:1px solid rgba(243,239,230,.3);padding-bottom:.4rem;transition:.4s var(--ease)}
+.cat-more svg{width:20px;transition:transform .4s var(--ease)}
+.cat-more:hover{color:var(--accent-2);border-color:var(--accent-2)}
+.cat-more:hover svg{transform:translateX(7px)}
+.cat .ghost{position:absolute;right:var(--pad);bottom:8%;font-family:var(--f-mono);font-size:.7rem;letter-spacing:.2em;color:rgba(243,239,230,.25);writing-mode:vertical-rl}
+
+.prod-progress{position:absolute;bottom:clamp(1.2rem,4vh,2.6rem);left:var(--pad);right:var(--pad);height:1px;background:rgba(243,239,230,.16);z-index:5}
+.prod-progress i{display:block;height:100%;width:0;background:var(--accent-2)}
+
+/* fallback vertical stack (mobile / reduced-motion) */
+.prod-stack{display:none}
+.prod-stack .cat{padding:clamp(3rem,9vw,6rem) 0;border-bottom:1px solid rgba(243,239,230,.12)}
+
+/* ===================================================================
+   INDUSTRIES — dual marquee
+   =================================================================== */
+#industries{background:var(--paper);overflow:hidden}
+.ind-head{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:1.5rem;margin-bottom:clamp(2.5rem,6vw,4.5rem)}
+.ind-head h2{font-family:var(--f-display);font-weight:600;font-size:clamp(2.2rem,6vw,5rem);line-height:.98;letter-spacing:-.02em}
+.ind-head p{max-width:30ch;color:var(--ink-2)}
+.marquee{display:flex;gap:1.4rem;width:max-content;will-change:transform}
+.marquee.row2{margin-top:1.4rem}
+.ind-card{flex:0 0 auto;width:clamp(230px,26vw,360px)}
+.ind-card .ph{position:relative;overflow:hidden;border-radius:6px;aspect-ratio:4/3;background:var(--paper-2)}
+.ind-card img{width:100%;height:100%;object-fit:cover;filter:grayscale(.55) contrast(1.02);transform:scale(1.05);transition:filter .6s var(--ease),transform .9s var(--ease)}
+.ind-card:hover img{filter:none;transform:scale(1.12)}
+.ind-card .cap{display:flex;align-items:center;justify-content:space-between;margin-top:.8rem;font-family:var(--f-mono);font-size:.72rem;letter-spacing:.14em;text-transform:uppercase}
+.ind-card .cap span:last-child{color:var(--accent)}
+
+/* ===================================================================
+   CONTACT
+   =================================================================== */
+#contact{background:var(--paper-2)}
+.contact-grid{display:grid;grid-template-columns:1fr;gap:clamp(3rem,7vw,5rem)}
+@media(min-width:920px){.contact-grid{grid-template-columns:1.3fr .9fr}}
+.contact-grid h2{font-family:var(--f-display);font-weight:700;font-size:clamp(2.6rem,8vw,6.5rem);line-height:.95;letter-spacing:-.03em;margin-bottom:2.5rem}
+.contact-grid h2 em{font-style:italic;color:var(--accent)}
+.field{position:relative;margin-bottom:2.2rem}
+.field input,.field textarea{
+  width:100%;background:transparent;border:none;border-bottom:1px solid var(--line);
+  padding:.9rem 0;font-family:var(--f-ui);font-size:1.05rem;color:var(--ink);resize:none;
+}
+.field textarea{min-height:90px}
+.field label{position:absolute;left:0;top:.9rem;color:var(--ink-2);pointer-events:none;
+  font-size:1.05rem;transition:.35s var(--ease);font-family:var(--f-ui)}
+.field input:focus,.field textarea:focus{outline:none;border-color:var(--accent)}
+.field input:focus+label,.field textarea:focus+label,
+.field input:valid+label,.field textarea:valid+label{
+  top:-.7rem;font-size:.68rem;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);font-family:var(--f-mono)}
+.contact-info{font-family:var(--f-ui)}
+.contact-info .blk{padding:1.5rem 0;border-top:1px solid var(--line)}
+.contact-info .k{font-family:var(--f-mono);font-size:.66rem;letter-spacing:.2em;text-transform:uppercase;color:var(--accent);margin-bottom:.7rem;display:block}
+.contact-info .v{font-size:1.08rem;line-height:1.5}
+.contact-info a.v:hover{color:var(--accent)}
+
+/* ===================================================================
+   FOOTER
+   =================================================================== */
+footer{background:var(--ink);color:var(--paper);padding:clamp(4rem,9vw,7rem) var(--pad) 2.5rem}
+.foot-big{font-family:var(--f-display);font-weight:700;font-size:clamp(3rem,15vw,15rem);line-height:.86;letter-spacing:-.03em;color:var(--paper);opacity:.96}
+.foot-big em{font-style:italic;color:var(--accent-2)}
+.foot-row{display:flex;flex-wrap:wrap;gap:2rem;justify-content:space-between;align-items:center;margin-top:clamp(2.5rem,6vw,4rem);padding-top:2rem;border-top:1px solid rgba(243,239,230,.16)}
+.foot-row img{height:34px;width:auto;filter:brightness(0) invert(1);opacity:.9}
+.foot-links{display:flex;flex-wrap:wrap;gap:1.6rem;font-family:var(--f-mono);font-size:.7rem;letter-spacing:.14em;text-transform:uppercase}
+.foot-links a{color:rgba(243,239,230,.6);transition:color .3s}
+.foot-links a:hover{color:var(--paper)}
+.copy{font-family:var(--f-mono);font-size:.66rem;letter-spacing:.14em;color:rgba(243,239,230,.4);margin-top:2rem}
+
+/* ===================================================================
+   REDUCED MOTION
+   =================================================================== */
+@media (prefers-reduced-motion: reduce){
+  *{animation:none !important;transition:none !important}
+  .reveal-line>*{transform:none !important}
+  .fold-menu a{transform:none}
+}
+</style>
+</head>
+<body>
+
+<div class="grain" aria-hidden="true"></div>
+
+<!-- ============ PRELOADER ============ -->
+<div id="preloader">
+  <img src="https://ksx.hjg.temporary.site/website_d2c01be2/wp-content/uploads/2025/10/Sign-2.gif" alt="Gulf Paper Industries" />
+  <div class="pl-bar"><span id="plFill"></span></div>
+  <div class="pl-count"><b id="plNum">0</b>%</div>
+</div>
+
+<!-- ============ NAV ============ -->
+<a class="brand" href="#top" aria-label="Gulf Paper Industries home">
+  <img src="https://ksx.hjg.temporary.site/website_d2c01be2/wp-content/uploads/2025/06/cropped-logo-1-1.png" alt="Gulf Paper Industries" />
+</a>
+
+<button class="menu-toggle" id="menuToggle"><span class="dot"></span><span id="menuLabel">Menu</span></button>
+
+<nav class="fold-menu" id="foldMenu" aria-hidden="true">
+  <ol>
+    <li><a href="#top"      data-link><span class="num">01</span>Home</a></li>
+    <li><a href="#about"    data-link><span class="num">02</span>About us</a></li>
+    <li><a href="#products" data-link><span class="num">03</span>Products</a></li>
+    <li><a href="#contact"  data-link><span class="num">04</span>Contact us</a></li>
+  </ol>
+  <div class="fold-foot">
+    <a href="https://www.instagram.com/gulfpapersindustries" target="_blank" rel="noopener">Instagram ↗</a>
+    <span>Doha · Qatar</span>
+    <a href="mailto:info@gpiqatar.com">info@gpiqatar.com</a>
+  </div>
+</nav>
+
+<!-- right chapter rail -->
+<div class="rail" id="rail" aria-hidden="true">
+  <button data-go="hero"><span class="lbl">Home</span><span class="tick"></span></button>
+  <button data-go="about"><span class="lbl">About</span><span class="tick"></span></button>
+  <button data-go="products"><span class="lbl">Products</span><span class="tick"></span></button>
+  <button data-go="industries"><span class="lbl">Industries</span><span class="tick"></span></button>
+  <button data-go="contact"><span class="lbl">Contact</span><span class="tick"></span></button>
+</div>
+
+<main id="top">
+
+<!-- ============ HERO ============ -->
+<section id="hero">
+  <div class="hero-floats" aria-hidden="true">
+    <span data-float style="top:-6%;right:-4%">GPI</span>
+  </div>
+  <div class="hero-inner">
+    <span class="eyebrow" data-fade>Gulf Paper Industries — Doha, Qatar</span>
+    <h1 class="hero-h" id="heroH">
+      <span class="reveal-line"><span class="w">Manufacturing</span></span>
+      <span class="reveal-line"><span class="w">The <em>Future</em></span></span>
+      <span class="reveal-line"><span class="w">of Everyday use</span></span>
+    </h1>
+    <div class="hero-ctas" data-fade>
+      <a href="#products" class="btn solid magnetic"><span>Explore Our Products</span></a>
+      <a href="#contact" class="btn magnetic"><span>Get in Touch</span></a>
+    </div>
+    <div class="scroll-cue" data-fade><span class="ln"></span> Scroll to unfold</div>
+  </div>
+</section>
+
+<!-- ============ ABOUT ============ -->
+<section id="about">
+  <div class="about-grid">
+    <figure class="about-fig" data-fig>
+      <div class="mask" data-mask></div>
+      <img src="https://ksx.hjg.temporary.site/website_d2c01be2/wp-content/uploads/2026/02/784-x-1344.jpg" alt="Gulf Paper Industries" loading="lazy" />
+    </figure>
+    <div class="about-copy">
+      <span class="eyebrow" data-fade>About us</span>
+      <h2 data-lines>We’re passionate about <em>delivering</em></h2>
+      <p data-fade>We take pride in being one of the region’s leading manufacturers of high-quality products designed for everyday use. Our story is built on a foundation of innovation, reliability, and a commitment to sustainability.</p>
+      <p data-fade>From hospitality and healthcare to industrial and commercial sectors, we provide paper solutions that combine performance, hygiene, and value. Every product we create reflects our dedication to excellence, our respect for the environment, and our goal to deliver dependable quality to clients across diverse industries.</p>
+
+      <div class="folds">
+        <div class="fold" data-fold>
+          <span class="n">01 — Mission</span>
+          <h3>Lasting partnerships</h3>
+          <p>To build long-term partnerships by consistently delivering quality, efficiency, and reliability in all our paper products.</p>
+        </div>
+        <div class="fold" data-fold>
+          <span class="n">02 — Vision</span>
+          <h3>The region’s most trusted</h3>
+          <p>To be the region’s most trusted paper manufacturer, combining innovation, environmental responsibility, and client-centric service.</p>
+        </div>
+        <div class="fold" data-fold>
+          <span class="n">03 — Commitment to Excellence</span>
+          <h3>Always improving</h3>
+          <p>Our experienced management team is committed to continuous improvement, operational efficiency, and customer satisfaction.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ PRODUCTS (pinned horizontal) ============ -->
+<section id="products">
+  <div class="prod-track-wrap" id="prodWrap">
+    <div class="prod-track" id="prodTrack">
+
+      <article class="prod-panel prod-intro">
+        <span class="eyebrow">Products</span>
+        <h2>GPI manufactures a wide range of high-quality products</h2>
+        <p>Tailored for institutional, healthcare, hospitality, and industrial use.</p>
+        <div class="hint">
+          Drag the story sideways
+          <svg viewBox="0 0 50 10" fill="none"><path d="M0 5h46m0 0-5-4m5 4-5 4" stroke="currentColor" stroke-width="1.2"/></svg>
+        </div>
+      </article>
+
+      <article class="prod-panel cat" data-cat>
+        <span class="idx">01 / 05</span>
+        <h3 class="big">Paper <em>Products</em></h3>
+        <a class="cat-more" href="https://ksx.hjg.temporary.site/website_d2c01be2/paper-products/" target="_blank" rel="noopener">More <svg viewBox="0 0 24 12" fill="none"><path d="M0 6h22m0 0-5-5m5 5-5 5" stroke="currentColor" stroke-width="1.3"/></svg></a>
+        <span class="ghost">Institutional · Healthcare</span>
+      </article>
+
+      <article class="prod-panel cat" data-cat>
+        <span class="idx">02 / 05</span>
+        <h3 class="big">Cleaning &amp; <em>Hygiene</em></h3>
+        <a class="cat-more" href="https://ksx.hjg.temporary.site/website_d2c01be2/cleaning-hygiene/" target="_blank" rel="noopener">More <svg viewBox="0 0 24 12" fill="none"><path d="M0 6h22m0 0-5-5m5 5-5 5" stroke="currentColor" stroke-width="1.3"/></svg></a>
+        <span class="ghost">Performance · Value</span>
+      </article>
+
+      <article class="prod-panel cat" data-cat>
+        <span class="idx">03 / 05</span>
+        <h3 class="big">Plastic <em>Products</em></h3>
+        <a class="cat-more" href="https://ksx.hjg.temporary.site/website_d2c01be2/plastic" target="_blank" rel="noopener">More <svg viewBox="0 0 24 12" fill="none"><path d="M0 6h22m0 0-5-5m5 5-5 5" stroke="currentColor" stroke-width="1.3"/></svg></a>
+        <span class="ghost">Industrial · Commercial</span>
+      </article>
+
+      <article class="prod-panel cat" data-cat>
+        <span class="idx">04 / 05</span>
+        <h3 class="big">Food <em>Packaging</em></h3>
+        <a class="cat-more" href="https://ksx.hjg.temporary.site/website_d2c01be2/food" target="_blank" rel="noopener">More <svg viewBox="0 0 24 12" fill="none"><path d="M0 6h22m0 0-5-5m5 5-5 5" stroke="currentColor" stroke-width="1.3"/></svg></a>
+        <span class="ghost">Hospitality · Catering</span>
+      </article>
+
+      <article class="prod-panel cat" data-cat>
+        <span class="idx">05 / 05</span>
+        <h3 class="big"><em>Dispensers</em></h3>
+        <a class="cat-more" href="https://ksx.hjg.temporary.site/website_d2c01be2/dispensers" target="_blank" rel="noopener">More <svg viewBox="0 0 24 12" fill="none"><path d="M0 6h22m0 0-5-5m5 5-5 5" stroke="currentColor" stroke-width="1.3"/></svg></a>
+        <span class="ghost">Hygiene · Facilities</span>
+      </article>
+
+    </div>
+    <div class="prod-progress"><i id="prodBar"></i></div>
+  </div>
+</section>
+
+<!-- ============ INDUSTRIES ============ -->
+<section id="industries">
+  <div class="ind-head">
+    <div>
+      <span class="eyebrow" data-fade>Reach</span>
+      <h2 data-lines>Industries We Serve</h2>
+    </div>
+    <p data-fade>Trusted across the sectors that keep the region running — day in, day out.</p>
+  </div>
+
+  <div class="marquee" id="m1">
+    <!-- row 1 cards injected/duplicated by JS -->
+  </div>
+  <div class="marquee row2" id="m2">
+    <!-- row 2 -->
+  </div>
+</section>
+
+<!-- ============ CONTACT ============ -->
+<section id="contact">
+  <div class="contact-grid">
+    <div>
+      <span class="eyebrow" data-fade>Contact us</span>
+      <h2 data-lines>Get in <em>Touch</em></h2>
+      <form id="contactForm">
+        <div class="field"><input type="text" id="cName" required /><label for="cName">Your name</label></div>
+        <div class="field"><input type="email" id="cEmail" required /><label for="cEmail">Email address</label></div>
+        <div class="field"><textarea id="cMsg" required></textarea><label for="cMsg">Message</label></div>
+        <button type="submit" class="btn solid magnetic"><span id="sendLabel">Send</span></button>
+      </form>
+    </div>
+    <aside class="contact-info" data-fade>
+      <div class="blk">
+        <span class="k">Visit</span>
+        <span class="v">New Industrial Area<br>Street No: 6 — Gate 66<br>P.O. Box: 24292<br>Doha, Qatar</span>
+      </div>
+      <div class="blk">
+        <span class="k">Call</span>
+        <a class="v" href="tel:+97444601961">+974 44601961</a>
+      </div>
+      <div class="blk">
+        <span class="k">Email</span>
+        <a class="v" href="mailto:info@gpiqatar.com">info@gpiqatar.com</a>
+      </div>
+      <div class="blk">
+        <span class="k">Find us</span>
+        <a class="v" href="https://g.co/kgs/pg1KW1V" target="_blank" rel="noopener">Google Maps ↗</a>
+      </div>
+    </aside>
+  </div>
+</section>
+
+</main>
+
+<!-- ============ FOOTER ============ -->
+<footer>
+  <div class="foot-big" data-lines>Everyday, <em>elevated.</em></div>
+  <div class="foot-row">
+    <img src="https://ksx.hjg.temporary.site/website_d2c01be2/wp-content/uploads/2025/06/logo-1-300x50.png" alt="Gulf Paper Industries" />
+    <div class="foot-links">
+      <a href="#about">About</a>
+      <a href="#products">Products</a>
+      <a href="#contact">Contact</a>
+      <a href="https://www.instagram.com/gulfpapersindustries" target="_blank" rel="noopener">Instagram ↗</a>
+    </div>
+  </div>
+  <div class="copy">© 2026 Gulf Paper Industries — Manufacturing The Future of Everyday use</div>
+</footer>
+
+<!-- ============ LIBS (cdnjs) ============ -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/lenis/1.1.13/lenis.min.js"></script>
+
+<script>
+(function(){
+  "use strict";
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const hasGSAP = typeof gsap !== 'undefined';
+  if (hasGSAP && typeof ScrollTrigger !== 'undefined') gsap.registerPlugin(ScrollTrigger);
+
+  /* ---------- INDUSTRIES data ---------- */
+  const BASE='https://ksx.hjg.temporary.site/website_d2c01be2/wp-content/uploads/2025/11/';
+  const inds=[
+    ['Airports','Gemini_Generated_Image_var085var085var0-min.png'],
+    ['Catering Companies','Gemini_Generated_Image_u5sby6u5sby6u5sb-min.png'],
+    ['Hospitals','Gemini_Generated_Image_qxeoczqxeoczqxeo-min.png'],
+    ['Cleaning Companies','Gemini_Generated_Image_j8i88nj8i88nj8i8-min.png'],
+    ['Facility Management','Gemini_Generated_Image_fl8vc9fl8vc9fl8v-min.png'],
+    ['Restaurants','Gemini_Generated_Image_d7trn4d7trn4d7tr-min.png'],
+    ['Hotels','Gemini_Generated_Image_3i1zpy3i1zpy3i1z-min.png']
+  ];
+  function card(name,file,i){
+    return `<div class="ind-card"><div class="ph"><img src="${BASE+file}" alt="${name}" loading="lazy"></div>
+      <div class="cap"><span>${name}</span><span>0${i+1}</span></div></div>`;
+  }
+  // duplicate the set twice per row for a seamless loop
+  const set = inds.map((d,i)=>card(d[0],d[1],i)).join('');
+  document.getElementById('m1').innerHTML = set+set;
+  document.getElementById('m2').innerHTML = set+set;
+
+  /* ---------- PRELOADER ---------- */
+  const pre=document.getElementById('preloader'), plNum=document.getElementById('plNum'), plFill=document.getElementById('plFill');
+  let n=0;
+  const tick=setInterval(()=>{
+    n+=Math.max(1,Math.round((100-n)*0.12));
+    if(n>=100){n=100;clearInterval(tick);finishPre();}
+    plNum.textContent=n; plFill.style.width=n+'%';
+  },55);
+
+  function finishPre(){
+    setTimeout(()=>{
+      if(hasGSAP && !reduce){
+        gsap.to(pre,{clipPath:'inset(0 0 100% 0)',duration:1,ease:'power4.inOut',onComplete:()=>{pre.style.display='none';start();}});
+      }else{
+        pre.style.display='none'; start();
+      }
+    },350);
+  }
+
+  /* ---------- SMOOTH SCROLL (Lenis) ---------- */
+  let lenis=null;
+  function initLenis(){
+    if(reduce || typeof Lenis==='undefined') return;
+    lenis=new Lenis({lerp:.085, wheelMultiplier:1, smoothWheel:true});
+    lenis.on('scroll', ()=>{ if(hasGSAP) ScrollTrigger.update(); });
+    function raf(t){ lenis.raf(t); requestAnimationFrame(raf); }
+    requestAnimationFrame(raf);
+    if(hasGSAP){ gsap.ticker.add((t)=>lenis.raf(t*1000)); gsap.ticker.lagSmoothing(0); }
+  }
+  function scrollTo(target){
+    const el=typeof target==='string'?document.querySelector(target):target;
+    if(!el) return;
+    if(lenis){ lenis.scrollTo(el,{offset:0,duration:1.3}); }
+    else el.scrollIntoView({behavior: reduce?'auto':'smooth'});
+  }
+
+  /* ---------- MAGNETIC BUTTONS ---------- */
+  function initMagnetic(){
+    if(reduce) return;
+    document.querySelectorAll('.magnetic').forEach(el=>{
+      const str=22;
+      el.addEventListener('mousemove',e=>{
+        const r=el.getBoundingClientRect();
+        const x=(e.clientX-r.left-r.width/2)/r.width*str;
+        const y=(e.clientY-r.top-r.height/2)/r.height*str;
+        el.style.transform=`translate(${x}px,${y}px)`;
+      });
+      el.addEventListener('mouseleave',()=>{el.style.transform='translate(0,0)';});
+      el.style.transition='transform .4s cubic-bezier(.16,1,.3,1)';
+    });
+  }
+
+  /* ---------- FOLD MENU ---------- */
+  const toggle=document.getElementById('menuToggle'), menu=document.getElementById('foldMenu'),
+        menuLabel=document.getElementById('menuLabel'), links=menu.querySelectorAll('a[data-link]');
+  let open=false;
+  function setMenu(state){
+    open=state;
+    menu.classList.toggle('open',open);
+    menu.setAttribute('aria-hidden',!open);
+    document.body.classList.toggle('lock',open);
+    menuLabel.textContent=open?'Close':'Menu';
+    if(hasGSAP && !reduce){
+      if(open) gsap.to(links,{y:0,duration:.8,stagger:.07,ease:'power4.out',delay:.15});
+      else gsap.to(links,{y:'110%',duration:.4,ease:'power2.in'});
+    }else{
+      links.forEach(l=>l.style.transform=open?'translateY(0)':'translateY(110%)');
+    }
+  }
+  toggle.addEventListener('click',()=>setMenu(!open));
+  links.forEach(a=>a.addEventListener('click',e=>{
+    e.preventDefault(); const t=a.getAttribute('href');
+    setMenu(false); setTimeout(()=>scrollTo(t),420);
+  }));
+
+  /* ---------- RAIL ---------- */
+  document.querySelectorAll('.rail button').forEach(b=>{
+    b.addEventListener('click',()=>scrollTo('#'+b.dataset.go));
+  });
+
+  /* contact form -> mailto (works on static hosting) */
+  document.getElementById('contactForm').addEventListener('submit',e=>{
+    e.preventDefault();
+    const nm=encodeURIComponent(document.getElementById('cName').value);
+    const em=encodeURIComponent(document.getElementById('cEmail').value);
+    const msg=encodeURIComponent(document.getElementById('cMsg').value);
+    document.getElementById('sendLabel').textContent='Opening mail…';
+    window.location.href=`mailto:info@gpiqatar.com?subject=Website enquiry from ${nm}&body=${msg}%0D%0A%0D%0AFrom: ${nm} (${em})`;
+    setTimeout(()=>document.getElementById('sendLabel').textContent='Send',2500);
+  });
+
+  /* ---------- MAIN ANIMATIONS ---------- */
+  function start(){
+    initLenis();
+    initMagnetic();
+    document.body.style.opacity=1;
+
+    if(!hasGSAP){ // graceful no-JS-anim fallback: show everything
+      document.querySelectorAll('.reveal-line>*,[data-fade],[data-fold],.mask').forEach(el=>{
+        el.style.transform='none';el.style.opacity=1; if(el.classList.contains('mask'))el.style.display='none';
+      });
+      buildVerticalProducts(true); return;
+    }
+
+    /* hero load reveal */
+    const tl=gsap.timeline({delay:.1});
+    tl.to('#heroH .reveal-line > *',{y:0,duration:1.1,stagger:.1,ease:'power4.out'})
+      .from('[data-fade]',{y:24,opacity:0,duration:.9,stagger:.08,ease:'power3.out'},'-=.7');
+
+    if(!reduce){
+      gsap.to('[data-float]',{yPercent:18,ease:'none',scrollTrigger:{trigger:'#hero',start:'top top',end:'bottom top',scrub:true}});
+      gsap.to('#heroH',{yPercent:-12,opacity:.85,ease:'none',scrollTrigger:{trigger:'#hero',start:'top top',end:'bottom top',scrub:true}});
+    }
+
+    /* generic fade-ins */
+    gsap.utils.toArray('[data-fade]').forEach(el=>{
+      if(el.closest('#hero')) return;
+      gsap.from(el,{y:30,opacity:0,duration:.9,ease:'power3.out',
+        scrollTrigger:{trigger:el,start:'top 88%'}});
+    });
+
+    /* line reveals for headings */
+    gsap.utils.toArray('[data-lines]').forEach(el=>{
+      splitLines(el);
+      gsap.from(el.querySelectorAll('.ln-i'),{yPercent:115,duration:1,stagger:.08,ease:'power4.out',
+        scrollTrigger:{trigger:el,start:'top 85%'}});
+    });
+
+    /* about image mask + parallax */
+    gsap.utils.toArray('[data-fig]').forEach(fig=>{
+      const mask=fig.querySelector('[data-mask]'), img=fig.querySelector('img');
+      gsap.to(mask,{scaleY:0,transformOrigin:'bottom',duration:1.2,ease:'power4.inOut',
+        scrollTrigger:{trigger:fig,start:'top 80%'}});
+      if(!reduce) gsap.fromTo(img,{yPercent:-9},{yPercent:9,ease:'none',
+        scrollTrigger:{trigger:fig,start:'top bottom',end:'bottom top',scrub:true}});
+    });
+
+    /* three folds unfold */
+    gsap.utils.toArray('[data-fold]').forEach((f,i)=>{
+      gsap.from(f,{rotateX:78,opacity:0,y:40,transformPerspective:900,duration:1,ease:'power3.out',delay:i*.06,
+        scrollTrigger:{trigger:f,start:'top 86%'}});
+    });
+
+    /* products horizontal pin */
+    setupProducts();
+
+    /* industries marquees (scroll-velocity reactive) */
+    setupMarquee();
+  }
+
+  /* split a heading's text into masked lines (lightweight SplitText) */
+  function splitLines(el){
+    const html=el.innerHTML;
+    const text=document.createElement('span');
+    text.innerHTML=html; // preserves inline tags like <em>
+    function wrapWords(parent){
+      parent.childNodes.forEach(ch=>{
+        if(ch.nodeType===3){
+          const frag=document.createDocumentFragment();
+          ch.textContent.split(/(\s+)/).forEach(tk=>{
+            if(tk.trim()===''){frag.appendChild(document.createTextNode(tk));}
+            else{const w=document.createElement('span');w.className='ln-w';w.style.display='inline-block';w.textContent=tk;frag.appendChild(w);}
+          });
+          ch.replaceWith(frag);
+        }else if(ch.nodeType===1){ wrapWords(ch); }
+      });
+    }
+    wrapWords(text);
+    el.innerHTML=''; el.appendChild(text);
+    // group words by top offset into lines
+    const ws=[...el.querySelectorAll('.ln-w')];
+    if(!ws.length){return;}
+    const lines=[]; let cur=[], top=null;
+    ws.forEach(w=>{ const t=w.offsetTop; if(top===null||Math.abs(t-top)<4){cur.push(w);top=(top===null)?t:top;} else {lines.push(cur);cur=[w];top=t;} });
+    if(cur.length)lines.push(cur);
+    // rebuild as masked lines
+    el.innerHTML='';
+    lines.forEach(ln=>{
+      const mask=document.createElement('span'); mask.style.display='block'; mask.style.overflow='hidden';
+      const inner=document.createElement('span'); inner.className='ln-i'; inner.style.display='block';
+      ln.forEach((w,idx)=>{ inner.appendChild(w); if(idx<ln.length-1) inner.appendChild(document.createTextNode(' ')); });
+      mask.appendChild(inner); el.appendChild(mask);
+    });
+  }
+
+  /* products: pin + horizontal translate; fall back to vertical */
+  function setupProducts(){
+    const wrap=document.getElementById('prodWrap'), track=document.getElementById('prodTrack'),
+          bar=document.getElementById('prodBar'), panels=track.querySelectorAll('.prod-panel');
+    const isMobile=window.matchMedia('(max-width:820px)').matches;
+    if(isMobile || reduce){ buildVerticalProducts(); return; }
+
+    const dist=()=> track.scrollWidth - window.innerWidth;
+    const horiz=gsap.to(track,{x:()=>-dist(),ease:'none',
+      scrollTrigger:{
+        trigger:'#products',start:'top top',end:()=>'+='+dist(),
+        pin:true,scrub:.6,invalidateOnRefresh:true,anticipatePin:1,
+        onUpdate:s=>{bar.style.width=(s.progress*100)+'%';}
+      }});
+    // each category headline rises slightly as it scrolls into view (uses the horizontal tween as container)
+    panels.forEach(p=>{ if(p.classList.contains('cat')){
+      gsap.from(p.querySelector('.big'),{xPercent:8,opacity:0,ease:'power2.out',
+        scrollTrigger:{trigger:p,containerAnimation:horiz,start:'left 70%',end:'left 30%',scrub:true}});
+    }});
+  }
+
+  function buildVerticalProducts(noAnim){
+    const wrap=document.getElementById('prodWrap');
+    const track=document.getElementById('prodTrack');
+    // convert to vertical stack
+    wrap.style.height='auto'; track.style.display='block'; track.style.transform='none';
+    track.querySelectorAll('.prod-panel').forEach(p=>{p.style.flex='none';p.style.width='auto';p.style.minHeight='auto';p.style.padding='clamp(3.5rem,11vw,7rem) var(--pad)';p.style.borderBottom='1px solid rgba(243,239,230,.12)';});
+    const bar=document.getElementById('prodBar'); if(bar) bar.parentElement.style.display='none';
+    if(hasGSAP && !noAnim){
+      gsap.utils.toArray('#prodTrack .cat .big').forEach(b=>{
+        gsap.from(b,{y:40,opacity:0,duration:1,ease:'power3.out',scrollTrigger:{trigger:b,start:'top 85%'}});
+      });
+    }
+  }
+
+  /* marquee: base drift + scroll velocity boost */
+  function setupMarquee(){
+    const m1=document.getElementById('m1'), m2=document.getElementById('m2');
+    const half1=m1.scrollWidth/2, half2=m2.scrollWidth/2;
+    let x1=0,x2=-half2, dir=1;
+    function loop(){
+      const v=lenis? (lenis.velocity||0):0;
+      const boost=1+Math.min(Math.abs(v)*0.18,7);
+      x1-=0.6*boost; x2+=0.6*boost;
+      if(x1<=-half1)x1+=half1; if(x1>0)x1-=half1;
+      if(x2>=0)x2-=half2; if(x2<-half2)x2+=half2;
+      m1.style.transform=`translate3d(${x1}px,0,0)`;
+      m2.style.transform=`translate3d(${x2}px,0,0)`;
+      requestAnimationFrame(loop);
+    }
+    if(!reduce) loop();
+  }
+
+  /* ---------- RAIL active state via ScrollTrigger ---------- */
+  window.addEventListener('load',()=>{
+    if(!hasGSAP) return;
+    const ids=['hero','about','products','industries','contact'];
+    ids.forEach(id=>{
+      const sec=document.getElementById(id); if(!sec) return;
+      ScrollTrigger.create({trigger:sec,start:'top 55%',end:'bottom 55%',
+        onToggle:self=>{ if(self.isActive){
+          document.querySelectorAll('.rail button').forEach(b=>b.classList.toggle('active',b.dataset.go===id));
+        }}});
+    });
+    setTimeout(()=>ScrollTrigger.refresh(),400);
+  });
+
+  document.body.style.opacity=0;
+  document.body.style.transition='opacity .6s ease';
+})();
+</script>
+</body>
+</html>
