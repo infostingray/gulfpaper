@@ -149,6 +149,10 @@ section{position:relative;padding:clamp(5rem,12vh,11rem) var(--pad)}
 .reveal-line{display:block;overflow:hidden}
 .reveal-line > *{display:block;transform:translateY(115%)}
 
+/* IntersectionObserver reveals (added by JS; default = visible if JS/IO unavailable) */
+.reveal-init{opacity:0;transform:translateY(26px)}
+.reveal-in{opacity:1;transform:none;transition:opacity .85s var(--ease),transform .85s var(--ease)}
+
 /* ===================================================================
    HERO
    =================================================================== */
@@ -392,3 +396,14 @@ footer{background:var(--ink);color:var(--paper);padding:clamp(4rem,9vw,7rem) var
 .pcard .meta{display:flex;align-items:baseline;justify-content:space-between;gap:1rem;margin-top:.9rem}
 .pcard h3{font-family:var(--f-display);font-weight:600;font-size:clamp(1.05rem,1.5vw,1.3rem);letter-spacing:-.01em;color:var(--ink)}
 .pcard .pn{font-family:var(--f-mono);font-size:.64rem;letter-spacing:.16em;color:var(--accent);flex:none}
+
+/* ===================================================================
+   PRODUCTS FILTER (single products page)
+   =================================================================== */
+.filter-tabs{display:flex;flex-wrap:wrap;gap:.6rem;margin-top:2.2rem;max-width:1500px}
+.filter-tabs button{font-family:var(--f-mono);font-size:.68rem;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;
+  padding:.6rem 1.05rem;border:1px solid var(--line);border-radius:100px;color:var(--ink-2);background:transparent;
+  transition:color .3s var(--ease),border-color .3s var(--ease),background .3s var(--ease)}
+.filter-tabs button:hover{border-color:var(--accent);color:var(--accent)}
+.filter-tabs button.is-active{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.pcard.is-hidden{display:none}

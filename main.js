@@ -153,57 +153,77 @@
     window.__updateLogo=updateLogo;
     updateLogo();
 
-    if(!hasGSAP){ // graceful no-JS-anim fallback: show everything
-      document.querySelectorAll('.reveal-line>*,[data-fade],[data-fold],.mask').forEach(el=>{
+    /* robust content reveals — works with or without GSAP, never leaves text hidden */
+    revealOnScroll();
+
+    if(!hasGSAP){ // no animation library: show structural bits and bail
+      document.querySelectorAll('.reveal-line>*,.mask').forEach(el=>{
         el.style.transform='none';el.style.opacity=1; if(el.classList.contains('mask'))el.style.display='none';
       });
       buildVerticalProducts(true); return;
     }
 
-    /* hero load reveal */
+    /* hero load reveal (scoped to hero only) */
     const tl=gsap.timeline({delay:.1});
     tl.to('#heroH .reveal-line > *',{y:0,duration:1.1,stagger:.1,ease:'power4.out'})
-      .from('[data-fade]',{y:24,opacity:0,duration:.9,stagger:.08,ease:'power3.out'},'-=.7');
+      .from('#hero [data-fade]',{y:24,opacity:0,duration:.9,stagger:.08,ease:'power3.out'},'-=.7');
 
     if(!reduce){
       gsap.to('[data-float]',{yPercent:18,ease:'none',scrollTrigger:{trigger:'#hero',start:'top top',end:'bottom top',scrub:true}});
       gsap.to('#heroH',{yPercent:-12,opacity:.85,ease:'none',scrollTrigger:{trigger:'#hero',start:'top top',end:'bottom top',scrub:true}});
     }
 
-    /* generic fade-ins */
-    gsap.utils.toArray('[data-fade]').forEach(el=>{
-      if(el.closest('#hero')) return;
-      gsap.from(el,{y:30,opacity:0,duration:.9,ease:'power3.out',
-        scrollTrigger:{trigger:el,start:'top 88%'}});
-    });
-
-    /* line reveals for headings */
-    gsap.utils.toArray('[data-lines]').forEach(el=>{
-      splitLines(el);
-      gsap.from(el.querySelectorAll('.ln-i'),{yPercent:115,duration:1,stagger:.08,ease:'power4.out',
-        scrollTrigger:{trigger:el,start:'top 85%'}});
-    });
-
     /* about image: accent side-wipe reveal + gentle parallax */
     gsap.utils.toArray('[data-fig]').forEach(fig=>{
       const mask=fig.querySelector('[data-mask]'), img=fig.querySelector('img');
       gsap.to(mask,{scaleX:0,transformOrigin:'right',duration:1.2,ease:'power4.inOut',
-        scrollTrigger:{trigger:fig,start:'top 82%'}});
+        scrollTrigger:{trigger:fig,start:'top 88%',once:true}});
       if(!reduce) gsap.fromTo(img,{yPercent:-8},{yPercent:8,ease:'none',
         scrollTrigger:{trigger:fig,start:'top bottom',end:'bottom top',scrub:true}});
-    });
-
-    /* value blocks: clean staggered rise */
-    gsap.utils.toArray('[data-fold]').forEach((f,i)=>{
-      gsap.from(f,{y:46,opacity:0,duration:1,ease:'power3.out',delay:i*.1,
-        scrollTrigger:{trigger:f,start:'top 88%'}});
     });
 
     /* products horizontal pin */
     setupProducts();
 
+    /* products page filter (no reload) */
+    setupFilter();
+
     /* industries marquees (scroll-velocity reactive) */
     setupMarquee();
+
+    if(typeof ScrollTrigger!=='undefined') setTimeout(()=>ScrollTrigger.refresh(),300);
+  }
+
+  /* IntersectionObserver reveal — bulletproof, fires for in-view elements on load */
+  function revealOnScroll(){
+    const els=[...document.querySelectorAll('[data-fade],[data-lines],[data-fold]')].filter(el=>!el.closest('#hero'));
+    if(reduce || !('IntersectionObserver' in window)){ els.forEach(el=>el.classList.add('reveal-in')); return; }
+    els.forEach(el=>el.classList.add('reveal-init'));
+    const io=new IntersectionObserver((ents)=>{
+      ents.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('reveal-in'); io.unobserve(e.target); } });
+    },{rootMargin:'0px 0px -7% 0px',threshold:0.04});
+    els.forEach(el=>io.observe(el));
+    // safety net: anything still hidden after 2.5s gets shown
+    setTimeout(()=>els.forEach(el=>el.classList.add('reveal-in')),2500);
+  }
+
+  /* products page: instant client-side category filter (no reload) */
+  function setupFilter(){
+    const tabs=[...document.querySelectorAll('.filter-tabs button')];
+    const cards=[...document.querySelectorAll('.gallery .pcard')];
+    if(!tabs.length || !cards.length) return;
+    const valid=tabs.map(t=>t.dataset.cat);
+    function apply(cat){
+      cards.forEach(c=>{ c.classList.toggle('is-hidden', !(cat==='all' || c.dataset.cat===cat)); });
+      tabs.forEach(t=>t.classList.toggle('is-active', t.dataset.cat===cat));
+      if(typeof ScrollTrigger!=='undefined') ScrollTrigger.refresh();
+    }
+    tabs.forEach(t=>t.addEventListener('click',()=>{
+      apply(t.dataset.cat);
+      history.replaceState(null,'','#'+t.dataset.cat);
+    }));
+    const hash=(location.hash||'').replace('#','');
+    apply(valid.includes(hash)?hash:'all');
   }
 
   /* split a heading's text into masked lines (lightweight SplitText) */
