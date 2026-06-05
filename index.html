@@ -61,16 +61,24 @@ img{display:block;max-width:100%}
 }
 
 /* ===================================================================
-   PRELOADER — the sheet
+   PRELOADER — "The Press" (sheet-feed reveal)
    =================================================================== */
-#preloader{
-  position:fixed;inset:0;z-index:10000;background:var(--paper);
-  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2rem;
-}
-#preloader img{width:clamp(120px,22vw,200px);height:auto;filter:contrast(1.05)}
-.pl-bar{width:min(60vw,340px);height:1px;background:var(--line);position:relative;overflow:hidden}
-.pl-bar span{position:absolute;inset:0;width:0;background:var(--ink)}
-.pl-count{font-family:var(--f-mono);font-size:.72rem;letter-spacing:.25em;color:var(--ink-2)}
+#preloader{position:fixed;inset:0;z-index:10000;overflow:hidden}
+.pl-panels{position:absolute;inset:0;display:flex;z-index:1}
+.pl-panels .p{flex:1;height:100%;background:var(--ink);position:relative;will-change:transform}
+.pl-panels .p::after{content:"";position:absolute;top:0;right:0;width:1px;height:100%;background:rgba(255,255,255,.05)}
+.pl-panels .p:nth-child(even){background:#0c0c58}
+.pl-core{position:absolute;inset:0;z-index:3;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1.6rem;color:#fff;text-align:center;padding:2rem}
+.pl-tag{font-family:var(--f-mono);font-size:.66rem;letter-spacing:.34em;text-transform:uppercase;color:var(--accent-2);overflow:hidden}
+.pl-tag span{display:inline-block;transform:translateY(110%)}
+.pl-logo{width:clamp(120px,20vw,190px);height:auto;filter:brightness(0) invert(1);opacity:0}
+.pl-num{font-family:var(--f-display);font-weight:700;font-size:clamp(3.4rem,11vw,8rem);line-height:1;letter-spacing:-.03em;display:flex;align-items:flex-start;gap:.15em}
+.pl-num small{font-size:.26em;font-weight:600;margin-top:.6em;color:var(--accent-2)}
+.pl-line{width:min(64vw,360px);height:2px;background:rgba(255,255,255,.14);position:relative;overflow:hidden;border-radius:2px}
+.pl-line i{position:absolute;inset:0;width:0;background:var(--accent-2)}
+.pl-words{height:1.4em;overflow:hidden;font-family:var(--f-mono);font-size:.72rem;letter-spacing:.22em;text-transform:uppercase;color:rgba(255,255,255,.55)}
+.pl-words ul{list-style:none;padding:0;margin:0;animation:plcycle 5s steps(1) infinite}
+@keyframes plcycle{0%,20%{transform:translateY(0)}25%,40%{transform:translateY(-1.4em)}45%,60%{transform:translateY(-2.8em)}65%,80%{transform:translateY(-4.2em)}85%,100%{transform:translateY(-5.6em)}}
 
 /* ===================================================================
    NAVIGATION
@@ -186,35 +194,49 @@ section{position:relative;padding:clamp(5rem,12vh,11rem) var(--pad)}
 @keyframes slide{0%{transform:translateX(-100%)}60%,100%{transform:translateX(100%)}}
 
 /* ===================================================================
-   ABOUT
+   ABOUT — statement + depth
    =================================================================== */
-#about{background:var(--paper)}
-.about-grid{display:grid;grid-template-columns:1fr;gap:clamp(2.5rem,6vw,5rem);align-items:start}
-@media(min-width:900px){.about-grid{grid-template-columns:.85fr 1.15fr}}
-.about-fig{position:relative;overflow:hidden;border-radius:4px}
-.about-fig img{width:100%;height:auto;transform:scale(1.18);will-change:transform}
-.about-fig .mask{position:absolute;inset:0;background:var(--paper);transform-origin:top;z-index:2}
-.about-copy h2{font-family:var(--f-display);font-weight:600;letter-spacing:-.02em;
-  font-size:clamp(2rem,5vw,3.9rem);line-height:1.02;margin:1.2rem 0 1.6rem}
-.about-copy h2 em{font-style:italic;color:var(--accent)}
-.about-copy p{max-width:60ch;color:var(--ink-2);font-size:clamp(1rem,1.3vw,1.18rem);margin-bottom:1.1rem}
-@media(min-width:900px){
-  .about-copy{padding-top:3rem}
-  .about-copy h2{margin-left:-2.5rem} /* editorial overlap */
-}
+#about{background:var(--paper);overflow:hidden}
+.about-head{max-width:1500px;margin:0 auto}
+.about-head h2{font-family:var(--f-display);font-weight:700;letter-spacing:-.03em;
+  font-size:clamp(2.3rem,7vw,6rem);line-height:.98;margin-top:1.2rem;max-width:16ch}
+.about-head h2 em{font-style:normal;color:var(--accent)}
 
-/* ---------- three folds ---------- */
-.folds{display:grid;gap:1.4rem;margin-top:clamp(3rem,7vw,6rem)}
-@media(min-width:820px){.folds{grid-template-columns:repeat(3,1fr)}}
-.fold{
-  background:var(--paper-2);border:1px solid var(--line);border-radius:6px;
-  padding:clamp(1.8rem,3vw,2.6rem);transform-origin:top center;will-change:transform;
+.about-body{display:grid;grid-template-columns:1fr;gap:clamp(2.5rem,6vw,5rem);align-items:start;margin-top:clamp(2.8rem,6vw,4.5rem);max-width:1500px}
+@media(min-width:920px){.about-body{grid-template-columns:.92fr 1.08fr}}
+
+.about-fig{position:relative;align-self:start}
+@media(min-width:920px){.about-fig{position:sticky;top:14vh}}
+.about-fig .deco{position:absolute;left:-16px;bottom:-16px;width:58%;height:62%;background:var(--ink);border-radius:6px;z-index:1}
+.about-fig .frame{position:relative;overflow:hidden;border-radius:6px;z-index:2}
+.about-fig .frame img{width:100%;height:auto;transform:scale(1.16);will-change:transform}
+.about-fig .mask{position:absolute;inset:0;background:var(--accent);transform-origin:right;z-index:3}
+.about-fig .ftag{position:absolute;right:14px;bottom:14px;z-index:4;background:rgba(245,247,252,.92);
+  -webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);padding:.5rem .85rem;border-radius:100px;
+  font-family:var(--f-mono);font-size:.58rem;letter-spacing:.18em;text-transform:uppercase;color:var(--ink)}
+
+.about-copy .lead{color:var(--ink);font-size:clamp(1.2rem,2vw,1.65rem);line-height:1.42;font-weight:400;
+  padding-left:1.4rem;border-left:2px solid var(--accent);margin-bottom:1.8rem}
+.about-copy p.body{max-width:58ch;color:var(--ink-2);font-size:clamp(1rem,1.3vw,1.12rem);margin-bottom:1.6rem}
+.about-copy .ig{display:inline-flex;align-items:center;gap:.6rem;font-family:var(--f-mono);font-size:.72rem;
+  letter-spacing:.16em;text-transform:uppercase;color:var(--accent);border-bottom:1px solid var(--accent);
+  padding-bottom:.35rem;transition:gap .35s var(--ease)}
+.about-copy .ig:hover{gap:1.1rem}
+
+/* values trio */
+.values{margin-top:clamp(4rem,9vw,7rem);display:grid;gap:0;border-top:1px solid var(--line);max-width:1500px}
+@media(min-width:820px){.values{grid-template-columns:repeat(3,1fr)}}
+.value{padding:clamp(1.8rem,3vw,2.6rem) clamp(1rem,2vw,2rem) clamp(1.8rem,3vw,2.6rem) 0;
+  border-bottom:1px solid var(--line);position:relative;will-change:transform}
+@media(min-width:820px){
+  .value{border-bottom:none;border-right:1px solid var(--line);padding-left:clamp(1.4rem,2vw,2.4rem)}
+  .value:first-child{padding-left:0}.value:last-child{border-right:none}
 }
-.fold:nth-child(2){margin-top:0}
-@media(min-width:820px){.fold:nth-child(2){margin-top:3rem}.fold:nth-child(3){margin-top:1.2rem}}
-.fold .n{font-family:var(--f-mono);font-size:.72rem;letter-spacing:.2em;color:var(--accent)}
-.fold h3{font-family:var(--f-display);font-weight:600;font-size:clamp(1.4rem,2.4vw,2rem);margin:1.6rem 0 .9rem;letter-spacing:-.01em}
-.fold p{color:var(--ink-2);font-size:.98rem}
+.value .vn{font-family:var(--f-display);font-weight:800;font-size:clamp(2.6rem,5vw,4rem);line-height:1;
+  color:transparent;-webkit-text-stroke:1.4px var(--accent);opacity:.85}
+.value .vk{display:block;font-family:var(--f-mono);font-size:.64rem;letter-spacing:.22em;text-transform:uppercase;color:var(--accent);margin:1.1rem 0 .5rem}
+.value h3{font-family:var(--f-display);font-weight:700;font-size:clamp(1.2rem,2vw,1.55rem);letter-spacing:-.01em;margin-bottom:.7rem;color:var(--ink)}
+.value p{color:var(--ink-2);font-size:.98rem}
 
 /* ===================================================================
    PRODUCTS — pinned horizontal stack
@@ -318,11 +340,27 @@ footer{background:var(--ink);color:var(--paper);padding:clamp(4rem,9vw,7rem) var
 
 <div class="grain" aria-hidden="true"></div>
 
-<!-- ============ PRELOADER ============ -->
+<!-- ============ PRELOADER — "The Press" ============ -->
 <div id="preloader">
-  <img src="images/sign.gif" alt="Gulf Paper Industries" />
-  <div class="pl-bar"><span id="plFill"></span></div>
-  <div class="pl-count"><b id="plNum">0</b>%</div>
+  <div class="pl-panels" aria-hidden="true">
+    <div class="p"></div><div class="p"></div><div class="p"></div><div class="p"></div>
+    <div class="p"></div><div class="p"></div><div class="p"></div><div class="p"></div>
+  </div>
+  <div class="pl-core">
+    <div class="pl-tag"><span id="plTag">Gulf Paper Industries</span></div>
+    <img class="pl-logo" id="plLogo" src="images/logo.png" alt="Gulf Paper Industries" />
+    <div class="pl-num"><b id="plNum">0</b><small>%</small></div>
+    <div class="pl-line"><i id="plFill"></i></div>
+    <div class="pl-words">
+      <ul>
+        <li>Paper Products</li>
+        <li>Cleaning &amp; Hygiene</li>
+        <li>Plastic Products</li>
+        <li>Food Packaging</li>
+        <li>Dispensers</li>
+      </ul>
+    </div>
+  </div>
 </div>
 
 <!-- ============ NAV ============ -->
@@ -379,34 +417,46 @@ footer{background:var(--ink);color:var(--paper);padding:clamp(4rem,9vw,7rem) var
 
 <!-- ============ ABOUT ============ -->
 <section id="about">
-  <div class="about-grid">
-    <figure class="about-fig" data-fig>
-      <div class="mask" data-mask></div>
-      <img src="images/about.jpg" alt="Gulf Paper Industries" loading="lazy" />
-    </figure>
-    <div class="about-copy">
-      <span class="eyebrow" data-fade>About us</span>
-      <h2 data-lines>We’re passionate about <em>delivering</em></h2>
-      <p data-fade>We take pride in being one of the region’s leading manufacturers of high-quality products designed for everyday use. Our story is built on a foundation of innovation, reliability, and a commitment to sustainability.</p>
-      <p data-fade>From hospitality and healthcare to industrial and commercial sectors, we provide paper solutions that combine performance, hygiene, and value. Every product we create reflects our dedication to excellence, our respect for the environment, and our goal to deliver dependable quality to clients across diverse industries.</p>
+  <div class="about-head">
+    <span class="eyebrow" data-fade>About us</span>
+    <h2 data-lines>We’re passionate about <em>delivering</em></h2>
+  </div>
 
-      <div class="folds">
-        <div class="fold" data-fold>
-          <span class="n">01 — Mission</span>
-          <h3>Lasting partnerships</h3>
-          <p>To build long-term partnerships by consistently delivering quality, efficiency, and reliability in all our paper products.</p>
-        </div>
-        <div class="fold" data-fold>
-          <span class="n">02 — Vision</span>
-          <h3>The region’s most trusted</h3>
-          <p>To be the region’s most trusted paper manufacturer, combining innovation, environmental responsibility, and client-centric service.</p>
-        </div>
-        <div class="fold" data-fold>
-          <span class="n">03 — Commitment to Excellence</span>
-          <h3>Always improving</h3>
-          <p>Our experienced management team is committed to continuous improvement, operational efficiency, and customer satisfaction.</p>
-        </div>
+  <div class="about-body">
+    <figure class="about-fig" data-fig>
+      <span class="deco" aria-hidden="true"></span>
+      <div class="frame">
+        <div class="mask" data-mask></div>
+        <img src="images/about.jpg" alt="Gulf Paper Industries manufacturing" loading="lazy" />
       </div>
+      <span class="ftag">GPI · Doha, Qatar</span>
+    </figure>
+
+    <div class="about-copy">
+      <p class="lead" data-fade>We take pride in being one of the region’s leading manufacturers of high-quality products designed for everyday use. Our story is built on a foundation of innovation, reliability, and a commitment to sustainability.</p>
+      <p class="body" data-fade>From hospitality and healthcare to industrial and commercial sectors, we provide paper solutions that combine performance, hygiene, and value. Every product we create reflects our dedication to excellence, our respect for the environment, and our goal to deliver dependable quality to clients across diverse industries.</p>
+      <a class="ig" href="https://www.instagram.com/gulfpapersindustries" target="_blank" rel="noopener">Follow our work ↗</a>
+    </div>
+  </div>
+
+  <div class="values">
+    <div class="value" data-fold>
+      <div class="vn">01</div>
+      <span class="vk">Mission</span>
+      <h3>Lasting partnerships</h3>
+      <p>To build long-term partnerships by consistently delivering quality, efficiency, and reliability in all our paper products.</p>
+    </div>
+    <div class="value" data-fold>
+      <div class="vn">02</div>
+      <span class="vk">Vision</span>
+      <h3>The region’s most trusted</h3>
+      <p>To be the region’s most trusted paper manufacturer, combining innovation, environmental responsibility, and client-centric service.</p>
+    </div>
+    <div class="value" data-fold>
+      <div class="vn">03</div>
+      <span class="vk">Commitment to Excellence</span>
+      <h3>Always improving</h3>
+      <p>Our experienced management team is committed to continuous improvement, operational efficiency, and customer satisfaction.</p>
     </div>
   </div>
 </section>
@@ -567,23 +617,37 @@ footer{background:var(--ink);color:var(--paper);padding:clamp(4rem,9vw,7rem) var
   document.getElementById('m1').innerHTML = set+set;
   document.getElementById('m2').innerHTML = set+set;
 
-  /* ---------- PRELOADER ---------- */
+  /* ---------- PRELOADER — "The Press" ---------- */
   const pre=document.getElementById('preloader'), plNum=document.getElementById('plNum'), plFill=document.getElementById('plFill');
+
+  // intro: tag + logo rise in
+  if(hasGSAP && !reduce){
+    gsap.to('#plTag span',{y:0,duration:.8,ease:'power4.out',delay:.1});
+    gsap.to('#plLogo',{opacity:1,y:0,duration:.9,ease:'power3.out',delay:.25});
+  }else{
+    const t=document.querySelector('#plTag span'); if(t)t.style.transform='none';
+    const l=document.getElementById('plLogo'); if(l)l.style.opacity=1;
+  }
+
   let n=0;
   const tick=setInterval(()=>{
-    n+=Math.max(1,Math.round((100-n)*0.12));
+    n+=Math.max(1,Math.round((100-n)*0.10));
     if(n>=100){n=100;clearInterval(tick);finishPre();}
     plNum.textContent=n; plFill.style.width=n+'%';
-  },55);
+  },60);
 
   function finishPre(){
     setTimeout(()=>{
       if(hasGSAP && !reduce){
-        gsap.to(pre,{clipPath:'inset(0 0 100% 0)',duration:1,ease:'power4.inOut',onComplete:()=>{pre.style.display='none';start();}});
+        const tl=gsap.timeline({onComplete:()=>{pre.style.display='none';start();}});
+        // core content lifts out first
+        tl.to('.pl-core',{y:-34,opacity:0,duration:.5,ease:'power2.in'})
+          // sheets pulled off the stack, left-to-right, with a touch of paper skew
+          .to('.pl-panels .p',{yPercent:-100,duration:.9,ease:'power4.inOut',stagger:.06},'-=.15');
       }else{
         pre.style.display='none'; start();
       }
-    },350);
+    },300);
   }
 
   /* ---------- SMOOTH SCROLL (Lenis) ---------- */
@@ -701,19 +765,19 @@ footer{background:var(--ink);color:var(--paper);padding:clamp(4rem,9vw,7rem) var
         scrollTrigger:{trigger:el,start:'top 85%'}});
     });
 
-    /* about image mask + parallax */
+    /* about image: accent side-wipe reveal + gentle parallax */
     gsap.utils.toArray('[data-fig]').forEach(fig=>{
       const mask=fig.querySelector('[data-mask]'), img=fig.querySelector('img');
-      gsap.to(mask,{scaleY:0,transformOrigin:'bottom',duration:1.2,ease:'power4.inOut',
-        scrollTrigger:{trigger:fig,start:'top 80%'}});
-      if(!reduce) gsap.fromTo(img,{yPercent:-9},{yPercent:9,ease:'none',
+      gsap.to(mask,{scaleX:0,transformOrigin:'right',duration:1.2,ease:'power4.inOut',
+        scrollTrigger:{trigger:fig,start:'top 82%'}});
+      if(!reduce) gsap.fromTo(img,{yPercent:-8},{yPercent:8,ease:'none',
         scrollTrigger:{trigger:fig,start:'top bottom',end:'bottom top',scrub:true}});
     });
 
-    /* three folds unfold */
+    /* value blocks: clean staggered rise */
     gsap.utils.toArray('[data-fold]').forEach((f,i)=>{
-      gsap.from(f,{rotateX:78,opacity:0,y:40,transformPerspective:900,duration:1,ease:'power3.out',delay:i*.06,
-        scrollTrigger:{trigger:f,start:'top 86%'}});
+      gsap.from(f,{y:46,opacity:0,duration:1,ease:'power3.out',delay:i*.1,
+        scrollTrigger:{trigger:f,start:'top 88%'}});
     });
 
     /* products horizontal pin */
