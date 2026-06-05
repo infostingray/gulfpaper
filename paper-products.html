@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Paper Products – Gulf Paper Industries</title>
+<meta name="description" content="Gulf Paper Industries paper products — facial tissues, toilet rolls, bedrolls, industrial rolls, napkins, maxi rolls and more. Doha, Qatar." />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400;1,600;1,700&family=Lato:ital,wght@0,300;0,400;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<div class="grain" aria-hidden="true"></div>
+
+<!-- PRELOADER -->
+<div id="preloader">
+  <div class="pl-panels" aria-hidden="true">
+    <div class="p"></div><div class="p"></div><div class="p"></div><div class="p"></div>
+    <div class="p"></div><div class="p"></div><div class="p"></div><div class="p"></div>
+  </div>
+  <div class="pl-core">
+    <div class="pl-tag"><span id="plTag">Gulf Paper Industries</span></div>
+    <img class="pl-logo" id="plLogo" src="images/logo.png" alt="Gulf Paper Industries" />
+    <div class="pl-num"><b id="plNum">0</b><small>%</small></div>
+    <div class="pl-line"><i id="plFill"></i></div>
+    <div class="pl-words"><ul>
+      <li>Paper Products</li><li>Cleaning &amp; Hygiene</li><li>Plastic Products</li><li>Food Packaging</li><li>Dispensers</li>
+    </ul></div>
+  </div>
+</div>
+
+<!-- NAV -->
+<a class="brand" href="index.html" aria-label="Gulf Paper Industries home"><img src="images/logo.png" alt="Gulf Paper Industries" /></a>
+<button class="menu-toggle" id="menuToggle"><span class="dot"></span><span id="menuLabel">Menu</span></button>
+<nav class="fold-menu" id="foldMenu" aria-hidden="true">
+  <ol>
+    <li><a href="index.html" data-link><span class="num">01</span>Home</a></li>
+    <li><a href="index.html#about" data-link><span class="num">02</span>About us</a></li>
+    <li><a href="index.html#products" data-link><span class="num">03</span>Products</a></li>
+    <li><a href="#contact" data-link><span class="num">04</span>Contact us</a></li>
+  </ol>
+  <div class="fold-foot">
+    <a href="https://www.instagram.com/gulfpapersindustries" target="_blank" rel="noopener">Instagram &#8599;</a>
+    <span>Doha &middot; Qatar</span>
+    <a href="mailto:info@gpiqatar.com">info@gpiqatar.com</a>
+  </div>
+</nav>
+
+<main id="top">
+
+<!-- COLLECTION -->
+<section class="collection">
+  <span class="crumb"><a href="index.html">Home</a> &nbsp;/&nbsp; <a href="index.html#products">Products</a> &nbsp;/&nbsp; Paper Products</span>
+  <div class="col-head">
+    <span class="eyebrow" data-fade>Paper Products</span>
+    <h1 data-lines>Paper <em>Products</em></h1>
+    <p data-fade>Tailored for institutional, healthcare, hospitality, and industrial use.</p>
+  </div>
+  <nav class="cat-nav" aria-label="Product categories">
+    <a href="paper-products.html" class="is-active">Paper</a>
+    <a href="cleaning-hygiene.html">Cleaning &amp; Hygiene</a>
+    <a href="plastic.html">Plastic</a>
+    <a href="food.html">Food Packaging</a>
+    <a href="dispensers.html">Dispensers</a>
+  </nav>
+  <div class="gallery">
+    <article class="pcard" data-fade><div class="shot"><img src="images/facial-tissues.jpg" alt="Facial Tissues" loading="lazy"></div><div class="meta"><h3>Facial Tissues</h3><span class="pn">01</span></div></article>
+    <article class="pcard" data-fade><div class="shot"><img src="images/toilet-rolls.jpg" alt="Toilet Rolls" loading="lazy"></div><div class="meta"><h3>Toilet Rolls</h3><span class="pn">02</span></div></article>
+    <article class="pcard" data-fade><div class="shot"><img src="images/bedrolls.jpg" alt="Bedrolls" loading="lazy"></div><div class="meta"><h3>Bedrolls</h3><span class="pn">03</span></div></article>
+    <article class="pcard" data-fade><div class="shot"><img src="images/industrial-rolls.jpg" alt="Industrial Rolls" loading="lazy"></div><div class="meta"><h3>Industrial Rolls</h3><span class="pn">04</span></div></article>
+    <article class="pcard" data-fade><div class="shot"><img src="images/napkins.jpg" alt="Napkins" loading="lazy"></div><div class="meta"><h3>Napkins</h3><span class="pn">05</span></div></article>
+    <article class="pcard" data-fade><div class="shot"><img src="images/maxi-roll.jpg" alt="Maxi Roll" loading="lazy"></div><div class="meta"><h3>Maxi Roll</h3><span class="pn">06</span></div></article>
+    <article class="pcard" data-fade><div class="shot"><img src="images/interfold-zfold.jpg" alt="Interfold / Z-Fold" loading="lazy"></div><div class="meta"><h3>Interfold / Z-Fold</h3><span class="pn">07</span></div></article>
+    <article class="pcard" data-fade><div class="shot"><img src="images/auto-cut.jpg" alt="Auto Cut" loading="lazy"></div><div class="meta"><h3>Auto Cut</h3><span class="pn">08</span></div></article>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="contact-grid">
+    <div>
+      <span class="eyebrow" data-fade>Contact us</span>
+      <h2 data-lines>Get in <em>Touch</em></h2>
+      <form id="contactForm">
+        <div class="field"><input type="text" id="cName" required /><label for="cName">Your name</label></div>
+        <div class="field"><input type="email" id="cEmail" required /><label for="cEmail">Email address</label></div>
+        <div class="field"><textarea id="cMsg" required></textarea><label for="cMsg">Message</label></div>
+        <button type="submit" class="btn solid magnetic"><span id="sendLabel">Send</span></button>
+      </form>
+    </div>
+    <aside class="contact-info" data-fade>
+      <div class="blk"><span class="k">Visit</span><span class="v">New Industrial Area<br>Street No: 6 &mdash; Gate 66<br>P.O. Box: 24292<br>Doha, Qatar</span></div>
+      <div class="blk"><span class="k">Call</span><a class="v" href="tel:+97444601961">+974 44601961</a></div>
+      <div class="blk"><span class="k">Email</span><a class="v" href="mailto:info@gpiqatar.com">info@gpiqatar.com</a></div>
+      <div class="blk"><span class="k">Find us</span><a class="v" href="https://g.co/kgs/pg1KW1V" target="_blank" rel="noopener">Google Maps &#8599;</a></div>
+    </aside>
+  </div>
+</section>
+
+</main>
+
+<footer data-dark>
+  <div class="foot-big" data-lines>Everyday, <em>elevated.</em></div>
+  <div class="foot-row">
+    <img src="images/logo-footer.png" alt="Gulf Paper Industries" />
+    <div class="foot-links">
+      <a href="index.html#about">About</a>
+      <a href="index.html#products">Products</a>
+      <a href="#contact">Contact</a>
+      <a href="https://www.instagram.com/gulfpapersindustries" target="_blank" rel="noopener">Instagram &#8599;</a>
+    </div>
+  </div>
+  <div class="copy">&copy; 2026 Gulf Paper Industries &mdash; Manufacturing The Future of Everyday use</div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/lenis/1.1.13/lenis.min.js"></script>
+<script src="main.js"></script>
+</body>
+</html>
