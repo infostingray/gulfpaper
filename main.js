@@ -2,6 +2,7 @@
   "use strict";
   const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   const hasGSAP = typeof gsap !== 'undefined';
+  let prodActive=false;   // true while the pinned products section is on screen
   if (hasGSAP && typeof ScrollTrigger !== 'undefined') gsap.registerPlugin(ScrollTrigger);
 
   /* ---------- INDUSTRIES data ---------- */
@@ -190,6 +191,10 @@
     /* industries marquees (scroll-velocity reactive) */
     setupMarquee();
 
+    /* hero flowing-lines canvas + side-rail active state */
+    setupHeroCanvas();
+    setupRail();
+
     if(typeof ScrollTrigger!=='undefined') setTimeout(()=>ScrollTrigger.refresh(),300);
   }
 
@@ -277,7 +282,8 @@
       scrollTrigger:{
         trigger:'#products',start:'top top',end:()=>'+='+dist(),
         pin:true,scrub:.6,invalidateOnRefresh:true,anticipatePin:1,
-        onUpdate:s=>{bar.style.width=(s.progress*100)+'%';}
+        onUpdate:s=>{bar.style.width=(s.progress*100)+'%';},
+        onToggle:self=>{ prodActive=self.isActive; if(window.__rail) window.__rail(); }
       }});
     panels.forEach(p=>{ if(p.classList.contains('cat')){
       gsap.from(p.querySelector('.big'),{xPercent:8,opacity:0,ease:'power2.out',
@@ -353,18 +359,67 @@
     if(!reduce) loop();
   }
 
-  /* ---------- RAIL active state via ScrollTrigger ---------- */
-  window.addEventListener('load',()=>{
-    if(!hasGSAP) return;
+  /* ---------- RAIL active state (products-aware, pin-safe) ---------- */
+  function setupRail(){
     const ids=['hero','about','products','industries','contact'];
-    ids.forEach(id=>{
-      const sec=document.getElementById(id); if(!sec) return;
-      ScrollTrigger.create({trigger:sec,start:'top 55%',end:'bottom 55%',
-        onToggle:self=>{ if(self.isActive){
-          document.querySelectorAll('.rail button').forEach(b=>b.classList.toggle('active',b.dataset.go===id));
-        }}});
-    });
-    setTimeout(()=>ScrollTrigger.refresh(),400);
-  });
+    const secs=ids.map(id=>({id,el:document.getElementById(id)})).filter(s=>s.el);
+    const btns=[...document.querySelectorAll('.rail button')];
+    if(!secs.length || !btns.length) return;
+    function set(active){ btns.forEach(b=>b.classList.toggle('active', b.dataset.go===active)); }
+    function upd(){
+      if(prodActive){ set('products'); return; }       // pinned section is authoritative
+      const mid=window.innerHeight*0.45; let active=secs[0].id;
+      for(const s of secs){ if(s.id==='products') continue;
+        const r=s.el.getBoundingClientRect();
+        if(r.top<=mid && r.bottom>mid){ active=s.id; } }
+      set(active);
+    }
+    window.__rail=upd;
+    window.addEventListener('scroll',upd,{passive:true});
+    window.addEventListener('resize',upd);
+    if(lenis) lenis.on('scroll',upd);
+    upd();
+  }
+
+  /* hero: flowing line-field canvas (paper-fibre feel) */
+  function setupHeroCanvas(){
+    const c=document.getElementById('heroCanvas'); if(!c) return;
+    const ctx=c.getContext('2d'); if(!ctx) return;
+    let W=0,H=0,dpr=1,raf=0,t=0,mx=0.5,my=0.5;
+    function resize(){
+      const r=c.getBoundingClientRect(); dpr=Math.min(window.devicePixelRatio||1,2);
+      c.width=Math.max(1,r.width*dpr); c.height=Math.max(1,r.height*dpr);
+      ctx.setTransform(dpr,0,0,dpr,0,0); W=r.width; H=r.height;
+    }
+    const LINES=5;
+    function draw(){
+      ctx.clearRect(0,0,W,H);
+      for(let i=0;i<LINES;i++){
+        const p=i/(LINES-1);
+        const baseY=H*0.30 + p*H*0.42;
+        const amp=(22+30*Math.sin(p*Math.PI))*(0.75+0.25*Math.sin(t*0.5+p*3));
+        ctx.beginPath();
+        for(let x=0;x<=W;x+=12){
+          const nx=x/W, taper=Math.sin(nx*Math.PI);          // fade movement near edges
+          const y=baseY + Math.sin(nx*4.2 + t + p*2.2 + mx*0.8)*amp*taper;
+          x===0?ctx.moveTo(x,y):ctx.lineTo(x,y);
+        }
+        // thin thread, colour drifting accent→deep, transparent at both ends
+        const r=Math.round(13+1*p), g=Math.round(150-136*p), b=Math.round(204-102*p);
+        const grad=ctx.createLinearGradient(0,0,W,0);
+        const a=0.14+0.10*Math.sin(p*Math.PI);
+        grad.addColorStop(0,`rgba(${r},${g},${b},0)`);
+        grad.addColorStop(0.5,`rgba(${r},${g},${b},${a.toFixed(3)})`);
+        grad.addColorStop(1,`rgba(${r},${g},${b},0)`);
+        ctx.strokeStyle=grad; ctx.lineWidth=0.9; ctx.stroke();
+      }
+    }
+    function frame(){ t+=0.0032; draw(); raf=requestAnimationFrame(frame); }
+    window.addEventListener('resize',resize);
+    window.addEventListener('pointermove',e=>{ mx=e.clientX/window.innerWidth; my=e.clientY/window.innerHeight; },{passive:true});
+    resize();
+    if(reduce){ draw(); return; }      // static single frame if reduced motion
+    frame();
+  }
 
 })();

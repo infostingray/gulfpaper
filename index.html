@@ -11,7 +11,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400;1,600;1,700&family=Lato:ital,wght@0,300;0,400;0,700;1,400&display=swap" rel="stylesheet">
 
-<link rel="stylesheet" href="style.css?v=5" />
+<link rel="stylesheet" href="style.css?v=7" />
 </head>
 <body>
 
@@ -75,12 +75,7 @@
 
 <!-- ============ HERO ============ -->
 <section id="hero">
-  <div class="hero-bg" aria-hidden="true">
-    <span class="blob bA"></span>
-    <span class="blob bB"></span>
-    <span class="blob bC"></span>
-    <span class="hbit h1"></span><span class="hbit h2"></span><span class="hbit h3"></span>
-  </div>
+  <div class="hero-bg" aria-hidden="true"><canvas id="heroCanvas"></canvas></div>
   <div class="hero-inner">
     <span class="eyebrow" data-fade>Gulf Paper Industries — Doha, Qatar</span>
     <h1 class="hero-h" id="heroH">
@@ -111,7 +106,10 @@
     <div class="about-copy">
       <span class="eyebrow" data-fade>About us</span>
       <h2 data-lines>We’re passionate about <em>delivering</em></h2>
-      <span class="about-since" data-fade>Since 2001 · Doha, Qatar</span>
+      <div class="about-since" data-fade>
+        <span class="yr">Since <b>2001</b></span>
+        <span class="loc">Manufacturing in Doha, Qatar</span>
+      </div>
       <p class="lead" data-fade>We take pride in being one of the region’s leading manufacturers of high-quality products designed for everyday use. Our story is built on a foundation of innovation, reliability, and a commitment to sustainability.</p>
       <p class="body" data-fade>From hospitality and healthcare to industrial and commercial sectors, we provide paper solutions that combine performance, hygiene, and value. Every product we create reflects our dedication to excellence, our respect for the environment, and our goal to deliver dependable quality to clients across diverse industries.</p>
       <ul class="about-tags" data-fade>
@@ -291,6 +289,6 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/lenis/1.1.13/lenis.min.js"></script>
 
-<script src="main.js?v=5"></script>
+<script src="main.js?v=7"></script>
 </body>
 </html>
