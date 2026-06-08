@@ -262,14 +262,16 @@
     });
   }
 
-  /* products: pin + horizontal translate; fall back to vertical */
+  /* products: desktop = pinned horizontal; mobile = swipe carousel; reduced = stack */
   function setupProducts(){
     const wrap=document.getElementById('prodWrap'), track=document.getElementById('prodTrack'),
           bar=document.getElementById('prodBar');
     if(!wrap || !track) return;            // page has no products section
     const panels=track.querySelectorAll('.prod-panel');
+    setupPoke();                            // clickable motifs (all viewports)
     const isMobile=window.matchMedia('(max-width:820px)').matches;
-    if(isMobile || reduce){ buildVerticalProducts(); return; }
+    if(reduce){ buildVerticalProducts(); return; }
+    if(isMobile){ setupMobileCarousel(wrap,track,bar); return; }
 
     const dist=()=> track.scrollWidth - window.innerWidth;
     const horiz=gsap.to(track,{x:()=>-dist(),ease:'none',
@@ -282,6 +284,25 @@
       gsap.from(p.querySelector('.big'),{xPercent:8,opacity:0,ease:'power2.out',
         scrollTrigger:{trigger:p,containerAnimation:horiz,start:'left 70%',end:'left 30%',scrub:true}});
     }});
+  }
+
+  /* finger-swipe carousel for phones (native scroll-snap) */
+  function setupMobileCarousel(wrap,track,bar){
+    wrap.classList.add('carousel');
+    const update=()=>{ const max=track.scrollWidth-wrap.clientWidth;
+      if(bar) bar.style.width=(max>0?(wrap.scrollLeft/max*100):0)+'%'; };
+    wrap.addEventListener('scroll',update,{passive:true});
+    update();
+  }
+
+  /* click a category motif → playful one-shot reaction, then idle resumes */
+  function setupPoke(){
+    document.querySelectorAll('.cat-deco').forEach(d=>{
+      d.addEventListener('click',()=>{
+        d.classList.remove('poke'); void d.offsetWidth; d.classList.add('poke');
+        clearTimeout(d._pk); d._pk=setTimeout(()=>d.classList.remove('poke'),850);
+      });
+    });
   }
 
   function buildVerticalProducts(noAnim){
