@@ -11,7 +11,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400;1,600;1,700&family=Lato:ital,wght@0,300;0,400;0,700;1,400&display=swap" rel="stylesheet">
 
-<link rel="stylesheet" href="style.css?v=4" />
+<link rel="stylesheet" href="style.css?v=5" />
 </head>
 <body>
 
@@ -75,8 +75,11 @@
 
 <!-- ============ HERO ============ -->
 <section id="hero">
-  <div class="hero-floats" aria-hidden="true">
-    <span data-float style="top:-6%;right:-4%">GPI</span>
+  <div class="hero-bg" aria-hidden="true">
+    <span class="blob bA"></span>
+    <span class="blob bB"></span>
+    <span class="blob bC"></span>
+    <span class="hbit h1"></span><span class="hbit h2"></span><span class="hbit h3"></span>
   </div>
   <div class="hero-inner">
     <span class="eyebrow" data-fade>Gulf Paper Industries — Doha, Qatar</span>
@@ -108,8 +111,9 @@
     <div class="about-copy">
       <span class="eyebrow" data-fade>About us</span>
       <h2 data-lines>We’re passionate about <em>delivering</em></h2>
-      <p class="lead" data-fade>One of the region’s leading manufacturers of high-quality products for everyday use — built on innovation, reliability, and sustainability.</p>
-      <p class="body" data-fade>From hospitality and healthcare to industrial and commercial sectors, we deliver paper, hygiene and packaging solutions that combine performance and value.</p>
+      <span class="about-since" data-fade>Since 2001 · Doha, Qatar</span>
+      <p class="lead" data-fade>We take pride in being one of the region’s leading manufacturers of high-quality products designed for everyday use. Our story is built on a foundation of innovation, reliability, and a commitment to sustainability.</p>
+      <p class="body" data-fade>From hospitality and healthcare to industrial and commercial sectors, we provide paper solutions that combine performance, hygiene, and value. Every product we create reflects our dedication to excellence, our respect for the environment, and our goal to deliver dependable quality to clients across diverse industries.</p>
       <ul class="about-tags" data-fade>
         <li>Innovation</li>
         <li>Reliability</li>
@@ -227,10 +231,7 @@
   </div>
 
   <div class="marquee" id="m1">
-    <!-- row 1 cards injected/duplicated by JS -->
-  </div>
-  <div class="marquee row2" id="m2">
-    <!-- row 2 -->
+    <!-- cards injected/duplicated by JS -->
   </div>
 </section>
 
@@ -290,6 +291,6 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/lenis/1.1.13/lenis.min.js"></script>
 
-<script src="main.js?v=4"></script>
+<script src="main.js?v=5"></script>
 </body>
 </html>

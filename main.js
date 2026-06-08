@@ -19,11 +19,10 @@
     return `<div class="ind-card"><div class="ph"><img src="${BASE+file}" alt="${name}" loading="lazy"></div>
       <div class="cap"><span>${name}</span><span>0${i+1}</span></div></div>`;
   }
-  // duplicate the set twice per row for a seamless loop
+  // duplicate the set twice for a seamless loop
   const set = inds.map((d,i)=>card(d[0],d[1],i)).join('');
-  const _m1=document.getElementById('m1'), _m2=document.getElementById('m2');
+  const _m1=document.getElementById('m1');
   if(_m1) _m1.innerHTML = set+set;
-  if(_m2) _m2.innerHTML = set+set;
 
   /* ---------- PRELOADER — "The Press" ---------- */
   const pre=document.getElementById('preloader'), plNum=document.getElementById('plNum'), plFill=document.getElementById('plFill');
@@ -286,13 +285,31 @@
     }});
   }
 
-  /* finger-swipe carousel for phones (native scroll-snap) */
+  /* finger-swipe carousel for phones (native scroll-snap) + swipe UI */
   function setupMobileCarousel(wrap,track,bar){
     wrap.classList.add('carousel');
-    const update=()=>{ const max=track.scrollWidth-wrap.clientWidth;
-      if(bar) bar.style.width=(max>0?(wrap.scrollLeft/max*100):0)+'%'; };
-    wrap.addEventListener('scroll',update,{passive:true});
-    update();
+    const panels=track.querySelectorAll('.prod-panel');
+    const section=wrap.closest('#products');
+
+    // build swipe indicator (label + dots) below the carousel
+    const ui=document.createElement('div'); ui.className='swipe-ui';
+    const label=document.createElement('span'); label.className='swipe-label';
+    label.innerHTML='Swipe to explore <span>&rarr;</span>';
+    const dots=document.createElement('div'); dots.className='swipe-dots';
+    panels.forEach((_,i)=>{ const b=document.createElement('button'); b.setAttribute('aria-label','Go to slide '+(i+1));
+      b.addEventListener('click',()=>wrap.scrollTo({left:i*wrap.clientWidth,behavior:'smooth'}));
+      dots.appendChild(b); });
+    ui.appendChild(label); ui.appendChild(dots);
+    if(section) section.appendChild(ui);
+
+    const onScroll=()=>{
+      const max=track.scrollWidth-wrap.clientWidth;
+      if(bar) bar.style.width=(max>0?(wrap.scrollLeft/max*100):0)+'%';
+      const idx=Math.round(wrap.scrollLeft/wrap.clientWidth);
+      [...dots.children].forEach((d,i)=>d.classList.toggle('on',i===idx));
+    };
+    wrap.addEventListener('scroll',onScroll,{passive:true});
+    onScroll();
   }
 
   /* click a category motif → playful one-shot reaction, then idle resumes */
@@ -319,20 +336,18 @@
     }
   }
 
-  /* marquee: base drift + scroll velocity boost */
+  /* marquee: single-row drift + scroll velocity boost */
   function setupMarquee(){
-    const m1=document.getElementById('m1'), m2=document.getElementById('m2');
-    if(!m1 || !m2) return;                 // page has no marquee
-    const half1=m1.scrollWidth/2, half2=m2.scrollWidth/2;
-    let x1=0,x2=-half2;
+    const m1=document.getElementById('m1');
+    if(!m1) return;
+    const half1=m1.scrollWidth/2;
+    let x1=0;
     function loop(){
       const v=lenis? (lenis.velocity||0):0;
       const boost=1+Math.min(Math.abs(v)*0.18,7);
-      x1-=0.6*boost; x2+=0.6*boost;
+      x1-=0.6*boost;
       if(x1<=-half1)x1+=half1; if(x1>0)x1-=half1;
-      if(x2>=0)x2-=half2; if(x2<-half2)x2+=half2;
       m1.style.transform=`translate3d(${x1}px,0,0)`;
-      m2.style.transform=`translate3d(${x2}px,0,0)`;
       requestAnimationFrame(loop);
     }
     if(!reduce) loop();
