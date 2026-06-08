@@ -209,31 +209,22 @@ section{position:relative;padding:clamp(5rem,12vh,11rem) var(--pad)}
 /* keep the portrait from dominating on phones */
 @media(max-width:860px){.about-fig .frame img{max-height:60vh;object-fit:cover;object-position:center}}
 
-.about-copy h2{font-family:var(--f-display);font-weight:700;letter-spacing:-.03em;
-  font-size:clamp(2rem,4.6vw,4.2rem);line-height:1.02;margin:.9rem 0 1.5rem;max-width:15ch}
-.about-copy h2 em{font-style:normal;color:var(--accent)}
-.about-copy .lead{color:var(--ink);font-size:clamp(1.18rem,1.9vw,1.6rem);line-height:1.42;font-weight:400;
-  padding-left:1.4rem;border-left:2px solid var(--accent);margin-bottom:1.7rem}
-.about-copy p.body{max-width:60ch;color:var(--ink-2);font-size:clamp(1rem,1.3vw,1.12rem);margin-bottom:1.6rem}
 .about-copy{display:flex;flex-direction:column}
-.about-since{display:flex;align-items:baseline;gap:1rem;flex-wrap:wrap;margin:.3rem 0 1.7rem}
-.about-since .yr{font-family:var(--f-display);font-weight:700;font-size:clamp(1.7rem,3.4vw,2.8rem);letter-spacing:-.01em;color:var(--ink);line-height:1}
-.about-since .yr b{color:var(--accent)}
-.about-since .loc{font-family:var(--f-ui);font-size:.74rem;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-2)}
-/* About uses just two type styles: Montserrat (display) + Lato (everything else) */
-#about .eyebrow,#about .about-since .loc,#about .about-tags li,#about .ig{font-family:var(--f-ui)}
-.about-copy .ig{display:inline-flex;align-items:center;gap:.6rem;align-self:flex-start;font-family:var(--f-mono);font-size:.72rem;
-  letter-spacing:.16em;text-transform:uppercase;color:var(--accent);border-bottom:1px solid var(--accent);
-  padding-bottom:.35rem;transition:gap .35s var(--ease)}
-.about-copy .ig:hover{gap:1.1rem}
-
-/* brand pillars (words drawn from GPI's own copy) */
-.about-tags{list-style:none;display:flex;flex-wrap:wrap;gap:.55rem;margin:.2rem 0 1.9rem}
-.about-tags li{font-family:var(--f-mono);font-size:.64rem;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-2);
-  border:1px solid var(--line);border-radius:100px;padding:.55rem .95rem;display:inline-flex;align-items:center;gap:.5rem;
-  transition:color .3s var(--ease),border-color .3s var(--ease)}
-.about-tags li::before{content:"";width:5px;height:5px;border-radius:50%;background:var(--accent)}
-.about-tags li:hover{border-color:var(--accent);color:var(--ink)}
+/* SIZE 1 — display heading (Montserrat) */
+.about-copy h2{font-family:var(--f-display);font-weight:700;letter-spacing:-.03em;
+  font-size:clamp(2rem,4.6vw,4.2rem);line-height:1.04;margin:.7rem 0 1.4rem;max-width:15ch}
+.about-copy h2 em{font-style:normal;color:var(--accent)}
+/* SIZE 2 — one body size for eyebrow, paragraphs and link (Lato) */
+.about-copy .eyebrow,.about-copy p.body,.about-copy .ig{
+  font-family:var(--f-ui);font-size:clamp(1.02rem,1.35vw,1.18rem);line-height:1.6}
+.about-copy .eyebrow{color:var(--accent);text-transform:uppercase;letter-spacing:.14em;margin-bottom:.2rem}
+.about-copy .eyebrow::before{display:none}
+.about-copy p.body{color:var(--ink-2);max-width:60ch;margin-bottom:1.3rem}
+.about-copy p.body b{color:var(--ink);font-weight:700}
+.about-copy .ig{align-self:flex-start;color:var(--accent);text-transform:uppercase;letter-spacing:.12em;
+  border-bottom:1px solid var(--accent);padding-bottom:.3rem;margin-top:.5rem;display:inline-flex;gap:.5rem;
+  transition:gap .35s var(--ease)}
+.about-copy .ig:hover{gap:1rem}
 
 /* faint monogram fills negative space */
 .about-mark{position:absolute;right:-2vw;bottom:-4vw;z-index:0;font-family:var(--f-display);font-weight:800;

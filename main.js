@@ -381,45 +381,40 @@
     upd();
   }
 
-  /* hero: flowing line-field canvas (paper-fibre feel) */
+  /* hero: organic flow-field — fine particles drift along invisible curves */
   function setupHeroCanvas(){
     const c=document.getElementById('heroCanvas'); if(!c) return;
     const ctx=c.getContext('2d'); if(!ctx) return;
-    let W=0,H=0,dpr=1,raf=0,t=0,mx=0.5,my=0.5;
+    let W=0,H=0,dpr=1,raf=0,t=0,mx=0.5;
+    const PAPER='245,247,252';           // matches --paper, used to fade trails
+    const N=150; let ps=[];
+    function seed(){ ps=[]; for(let i=0;i<N;i++) ps.push({x:Math.random()*W,y:Math.random()*H,
+      c: Math.random()<0.25 ? '14,14,102' : '13,150,204'}); }      // mostly accent, some navy
     function resize(){
       const r=c.getBoundingClientRect(); dpr=Math.min(window.devicePixelRatio||1,2);
       c.width=Math.max(1,r.width*dpr); c.height=Math.max(1,r.height*dpr);
       ctx.setTransform(dpr,0,0,dpr,0,0); W=r.width; H=r.height;
+      ctx.fillStyle='rgb('+PAPER+')'; ctx.fillRect(0,0,W,H); seed();
     }
-    const LINES=5;
-    function draw(){
-      ctx.clearRect(0,0,W,H);
-      for(let i=0;i<LINES;i++){
-        const p=i/(LINES-1);
-        const baseY=H*0.30 + p*H*0.42;
-        const amp=(22+30*Math.sin(p*Math.PI))*(0.75+0.25*Math.sin(t*0.5+p*3));
-        ctx.beginPath();
-        for(let x=0;x<=W;x+=12){
-          const nx=x/W, taper=Math.sin(nx*Math.PI);          // fade movement near edges
-          const y=baseY + Math.sin(nx*4.2 + t + p*2.2 + mx*0.8)*amp*taper;
-          x===0?ctx.moveTo(x,y):ctx.lineTo(x,y);
-        }
-        // thin thread, colour drifting accent→deep, transparent at both ends
-        const r=Math.round(13+1*p), g=Math.round(150-136*p), b=Math.round(204-102*p);
-        const grad=ctx.createLinearGradient(0,0,W,0);
-        const a=0.14+0.10*Math.sin(p*Math.PI);
-        grad.addColorStop(0,`rgba(${r},${g},${b},0)`);
-        grad.addColorStop(0.5,`rgba(${r},${g},${b},${a.toFixed(3)})`);
-        grad.addColorStop(1,`rgba(${r},${g},${b},0)`);
-        ctx.strokeStyle=grad; ctx.lineWidth=0.9; ctx.stroke();
+    function step(){
+      t+=0.0016;
+      ctx.fillStyle='rgba('+PAPER+',0.05)'; ctx.fillRect(0,0,W,H);   // soft fade → trails
+      ctx.lineWidth=1.1;
+      for(const p of ps){
+        const a=(Math.sin(p.x*0.0016+t)+Math.cos(p.y*0.0019-t*0.8)+Math.sin((p.x+p.y)*0.0011+mx*1.4))*1.5;
+        const nx=p.x+Math.cos(a)*1.5, ny=p.y+Math.sin(a)*1.5;
+        ctx.strokeStyle='rgba('+p.c+',0.22)';
+        ctx.beginPath(); ctx.moveTo(p.x,p.y); ctx.lineTo(nx,ny); ctx.stroke();
+        p.x=nx; p.y=ny;
+        if(p.x<-5||p.x>W+5||p.y<-5||p.y>H+5){ p.x=Math.random()*W; p.y=Math.random()*H; }
       }
+      raf=requestAnimationFrame(step);
     }
-    function frame(){ t+=0.0032; draw(); raf=requestAnimationFrame(frame); }
     window.addEventListener('resize',resize);
-    window.addEventListener('pointermove',e=>{ mx=e.clientX/window.innerWidth; my=e.clientY/window.innerHeight; },{passive:true});
+    window.addEventListener('pointermove',e=>{ mx=e.clientX/window.innerWidth; },{passive:true});
     resize();
-    if(reduce){ draw(); return; }      // static single frame if reduced motion
-    frame();
+    if(reduce) return;     // static paper if reduced motion
+    step();
   }
 
 })();
